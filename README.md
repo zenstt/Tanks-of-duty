@@ -1,17 +1,14 @@
-# WorldOfTanks
+# Tanks of Duty - DoT
 
 
-Vamos a empezar a crear nuestro juego World Of Tanks
+Juego de tanques por casillas que haremos para el proyecto de clase de Programación de aplicaciones web.
 
-Os he dejado en un repositorio del GITHUB.COM parte del código para iniciar el proyecto.
+En este repositorio se guarda todos los cambios hechos funcionales.
 
-La primera tarea será revisar el código para entenderlo.
-La segunda tarea será completar el código para realizar las tareas de registro de usuarios, login de usuario y editar los datos de un usuario.
-A todas las páginas creadas teneis que añadir los estilos correspondientes para que se vea lo mejor posible sin olvidar la temática de la página.
+Elementos por hacer en el juego:
 
-
-Repositorio:
-https://github.com/tfermoso/worldoftanks
-
-1. Clonar el repositorio
-2. Instalar las dependencias. npm install
+	1. Movebullets 
+	2. Cuentas para el juego
+	3. Creación de mapas en interface web
+	4. Mejorar la interfaz web
+	5. Ya se irá actualizando
