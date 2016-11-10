@@ -47,26 +47,47 @@ class Tablero{
 	// ------ Funciones ------ //
 	// Funcion que inserta un objeto en una casilla en la fila y columna indicados
 	insertar(objeto,columna,fila){
+		console.log(columna+" "+fila)
 		if (fila>this._filas || fila<0 || columna>this._columnas || columna<0){
 			console.log("Error: Fuera de rango");
+			return 3;
 		} else {
-			this._tablero[columna][fila].con = objeto;
+			if (this.info.length >= (this._filas+1)*(this._columnas+1)){
+				console.log("No hay mas espacio disponible")
+				return 2;
+			} else {
+				if (this._tablero[columna][fila].con != null){
+					return 1;
+				} else {
+					this._tablero[columna][fila].con = objeto;
+					return 0;
+				}
+			}
 		}
 	}
 
 	insertarTanque(tanque){
-		let ranTanqueX = Math.floor(Math.random()*this._columnas+1);
-		let ranTanqueY = Math.floor(Math.random()*this._filas+1);
-		this.insertar(tanque,ranTanqueX,ranTanqueY);
-		this._tanques.set(tanque.nombre,tanque);
+		let ranTanqueX = Math.floor(Math.random()*(this._columnas+1));
+		let ranTanqueY = Math.floor(Math.random()*(this._filas+1));
+		switch (this.insertar(tanque,ranTanqueX,ranTanqueY)){
+			case 3: return "Error: Fuera de rango";break;
+			case 2: return "Error: No espacio disponible";break;
+			case 1: this.insertarTanque(tanque);break;
+			case 0: this._tanques.set(tanque.nombre,tanque);break;
+		}
 	}
 
 	insertarRoca() {
-		let ranRocaX = Math.floor(Math.random()*this._columnas+1);
-		let ranRocaY = Math.floor(Math.random()*this._filas+1);
-		let roca=new elementos.roca();
-		this.insertar(roca,ranRocaX,ranRocaY);
+		let ranRocaX = Math.floor(Math.random()*(this._columnas+1));
+		let ranRocaY = Math.floor(Math.random()*(this._filas+1));
+		switch (this.insertar(new elementos.roca(),ranRocaX,ranRocaY)){
+			case 3: return "Error: Fuera de rango";break;
+			case 2: return "Error: No espacio disponible";break;
+			case 1: this.insertarRoca();break;
+			case 0: break;
+		}
 	}
+	
 	// Funcion que devuelve el contenido de la casilla de delante del objeto
 	casillaDelante(objeto){
 		let pos = objeto.pos;

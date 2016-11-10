@@ -1,5 +1,5 @@
 {
-  "name": "worldoftanks",
+  "name": "Tanks of duty",
   "version": "1.0.0",
   "description": "La guerra de los tanques",
   "main": "server.js",
@@ -9,14 +9,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "worldoftanques"
+    "url": "tanksofduty"
   },
   "keywords": [
     "nodejs",
     "tanques",
     "aulaestudio"
   ],
-  "author": "Tomás Fermoso",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.15.2",
