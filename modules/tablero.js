@@ -54,8 +54,7 @@ class Tablero{
 		}
 	}
 
-	insertarTanque(nombre,x,y){
-		let tanque = new elementos.tanque(nombre);
+	insertarTanque(tanque,x,y){
 		this.insertar(tanque,x,y);
 		this._tanques.set(tanque.nombre,tanque);
 	}
@@ -76,7 +75,7 @@ class Tablero{
 		}
 	}
 	mover(id){
-		let objeto= typeOf(id)=="number" ? balas.get(id):tanques.get(id);
+		let objeto= typeof(id)=="number" ? this._balas.get(id):this._tanques.get(id);
 		let delante = this.casillaDelante(objeto);
 		let posicion = objeto.pos;
 		if (delante){
