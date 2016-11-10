@@ -158,5 +158,12 @@ class Tablero{
 			}
 		}
 	}
+
+
+	moverBalas(){
+		for (let bala of balas.values()) {
+			mover(bala);
+		}	
+	}
 }
 module.exports = Tablero;
