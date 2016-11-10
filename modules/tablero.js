@@ -159,11 +159,13 @@ class Tablero{
 					if(delante.con.tipo=="bala"){
 						this._balas.delete(delante.con.id);
 						this._tablero[delante.pos.x][delante.pos.y].con = null;
+						return false;
 					}
 				}
 			}
+			return true;
 		}
-		return objeto;
+		return false;
 	}
 
 	moverBalas(){
