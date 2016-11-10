@@ -10,7 +10,7 @@ let roca1 = new elementos.roca();
 let bala1 = new elementos.bala();
 
 function pruebaMove(objeto,direccion,x,y){
-	tablero1.insertar(objeto,x,y);
+	tablero1.insertarTanque(objeto,x,y);
 	objeto.o = direccion;
 	console.log("Antes de moverse: ")
 	console.log(tablero1.info);
@@ -19,10 +19,11 @@ function pruebaMove(objeto,direccion,x,y){
 	console.log(tablero1.info);
 }
 function pruebaShoot(objeto,direccion,x,y){
-	tablero1.insertar(objeto,x,y);
+	tablero1.insertarTanque(objeto,x,y);
 	objeto.o = direccion;
 	tablero1.disparar(objeto);
 	console.log(tablero1.info);
+	console.log(tablero1.balas);
 	switch(direccion){
 		case "norte":tablero1.mover(tablero1.tablero[x][y-1].con);break;
 		case "sur":tablero1.mover(tablero1.tablero[x][y+1].con);break;
@@ -30,6 +31,7 @@ function pruebaShoot(objeto,direccion,x,y){
 		case "oeste":tablero1.mover(tablero1.tablero[x-1][y].con);break;
 	}
 	console.log(tablero1.info);
+	console.log(tablero1.balas);
 }
 
 /* Pruebas para el move
@@ -90,8 +92,10 @@ pruebaMove(tanque2,"sur",4,4);
 // pruebaShoot(tanque1,"norte",2,2);
 
 // 2.b - 
-tablero1.insertar(tanque1,0,0);
+
+tablero1.insertarTanque(tanque1,0,0);
 tanque1.o = "sur";
-pruebaShoot(tanque2,"oeste",2,0); 
-
-
+console.log(tablero1.info)
+tablero1.mover(tanque1)
+console.log(tablero1.info)
+//pruebaShoot(tanque2,"oeste",2,0); 

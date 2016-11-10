@@ -55,7 +55,8 @@ class Tablero{
 	}
 
 	insertarTanque(nombre,x,y){
-		let tanque = new elementos.Tanque(nombre);
+		let tanque = new elementos.tanque(nombre);
+		this._tanques.set(tanque.nombre,tanque);
 		this.insertar(tanque,x,y);
 	}
 	insertarRoca(x,y) {
