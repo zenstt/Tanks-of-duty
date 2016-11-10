@@ -54,14 +54,18 @@ class Tablero{
 		}
 	}
 
-	insertarTanque(tanque,x,y){
-		this.insertar(tanque,x,y);
+	insertarTanque(tanque){
+		let ranTanqueX = Math.floor(Math.random()*this._columnas+1);
+		let ranTanqueY = Math.floor(Math.random()*this._filas+1);
+		this.insertar(tanque,ranTanqueX,ranTanqueY);
 		this._tanques.set(tanque.nombre,tanque);
 	}
 
-	insertarRoca(x,y) {
+	insertarRoca() {
+		let ranRocaX = Math.floor(Math.random()*this._columnas+1);
+		let ranRocaY = Math.floor(Math.random()*this._filas+1);
 		let roca=new elementos.roca();
-		this.insertar(roca,x,y);
+		this.insertar(roca,ranRocaX,ranRocaY);
 	}
 	// Funcion que devuelve el contenido de la casilla de delante del objeto
 	casillaDelante(objeto){
@@ -127,7 +131,7 @@ class Tablero{
 	}
 
 	girar(id,direccion){
-		let objeto=tanques.get(id);
+		let objeto=this._tanques.get(id);
 		let orientaciones = ["norte","este","sur","oeste"];
 		let index = orientaciones.indexOf(objeto.pos.o);
 		switch (direccion){
@@ -138,8 +142,8 @@ class Tablero{
 		return objeto;
 	}
 	// esto es un comentario
-	disparar(id){
-		let objeto=tanques.get(id);
+	disparar(id){	
+		let objeto=this._tanques.get(id);
 		let delante = this.casillaDelante(objeto);
 		let posicion = objeto.pos;
 		if (objeto.muni>0){
@@ -169,9 +173,10 @@ class Tablero{
 	}
 
 	moverBalas(){
-		for (let bala of balas.values()) {
-			mover(bala);
+		for (let bala of this._balas.values()) {
+			this.mover(bala.id);
 		}	
 	}
+
 }
 module.exports = Tablero;
