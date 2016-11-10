@@ -28,8 +28,8 @@ class Tablero{
 	}
 	get info(){
 		let elem = [];	
-		for (let x = 0;x<this._columnas;x++){
-			for (let y=0;y<this._filas;y++){
+		for (let x = 0;x<=this._columnas;x++){
+			for (let y=0;y<=this._filas;y++){
 				if(this._tablero[x][y].con != null){
 					elem.push(this._tablero[x][y].con);
 				}
@@ -93,6 +93,11 @@ class Tablero{
 						this._tablero[posicion.x][posicion.y].con = null;
 					}
 				}
+			}
+		} else {
+			if (objeto.tipo =="bala"){
+				this._balas.delete(objeto.pos);
+				this._tablero[posicion.x][posicion.y].con = null;
 			}
 		}
 	}
