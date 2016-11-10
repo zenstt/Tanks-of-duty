@@ -15,6 +15,7 @@ class Tablero{
 			}
 		}
 		this._balas = new Map();
+		this._tanques = new Map();
 	}
 	// ------ GETTERS ------ //
 	get nombre(){
@@ -40,7 +41,9 @@ class Tablero{
 	get balas(){
 		return this._balas;
 	}
-
+	get tanques(){
+		return this._tanques;
+	}
 	// ------ Funciones ------ //
 	// Funcion que inserta un objeto en una casilla en la fila y columna indicados
 	insertar(objeto,columna,fila){
@@ -49,6 +52,15 @@ class Tablero{
 		} else {
 			this._tablero[columna][fila].con = objeto;
 		}
+	}
+
+	insertarTanque(nombre,x,y){
+		let tanque = new elementos.Tanque(nombre);
+		this.insertar(tanque,x,y);
+	}
+	insertarRoca(x,y) {
+		let roca=new elementos.roca();
+		this.insertar(roca,x,y);
 	}
 	// Funcion que devuelve el contenido de la casilla de delante del objeto
 	casillaDelante(objeto){
@@ -61,10 +73,6 @@ class Tablero{
 			default: console.log("Eso no es una orientacion"); break;
 		}
 	}
-	insertarRoca(x,y) {
-		let roca=new elementos.roca();
-		this.insertar(roca,x,y);
-	}
 	mover(objeto){
 		let delante = this.casillaDelante(objeto);
 		let posicion = objeto.pos;
@@ -75,6 +83,9 @@ class Tablero{
 				if (objeto.tipo=="bala"){
 					this._balas.set(objeto.id,objeto);
 				}
+				if (objeto.tipo =="tanque"){
+					this._tanques.set(objeto.nombre,objeto);
+				}
 			} else {
 				if (objeto.tipo == "tanque"){
 					if (delante.con.tipo == "tanque"){
@@ -84,9 +95,6 @@ class Tablero{
 						objeto.vida--;
 					} else if (delante.con.tipo == "bala"){
 						objeto.vida--;
-						console.log("test")
-						console.log(delante.con.id)
-						console.log(this._balas.get(delante.con.id));
 						this._balas.delete(delante.con.id);
 						this.insertar(objeto,delante.pos.x,delante.pos.y);
 						this._tablero[posicion.x][posicion.y].con = null;
