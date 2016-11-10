@@ -40,6 +40,7 @@ class Tablero{
 	get balas(){
 		return this._balas;
 	}
+
 	// ------ Funciones ------ //
 	// Funcion que inserta un objeto en una casilla en la fila y columna indicados
 	insertar(objeto,columna,fila){
@@ -59,6 +60,10 @@ class Tablero{
 			case "oeste":if(pos.x>0){return this._tablero[pos.x-1][pos.y]} else {return false};break;
 			default: console.log("Eso no es una orientacion"); break;
 		}
+	}
+	insertarRoca(x,y) {
+		let roca=new elementos.roca();
+		this.insertar(roca,x,y);
 	}
 	mover(objeto){
 		let delante = this.casillaDelante(objeto);
