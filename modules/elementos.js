@@ -70,7 +70,8 @@ class Roca{
 }
 // Clase que define la bala tanque del juego
 class Bala{
-	constructor(o){
+	constructor(id,o){
+		this._id=id;
 		this._x;
 		this._y;
 		this._o=o;
@@ -86,6 +87,9 @@ class Bala{
 	}
 	get tipo(){
 		return this._tipo;
+	}
+	get id(){
+		return this._id;
 	}
 	// ------ SETTERS ------ //.
 	set pos(value){

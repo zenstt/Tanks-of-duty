@@ -1,7 +1,7 @@
 "use strict";
 const casilla = require("./casilla.js");
 const elementos = require("./elementos.js");
-
+var contarBala = 0;
 class Tablero{
 	constructor(nombre,columnas,filas){
 		this._nombre = nombre;
@@ -37,6 +37,9 @@ class Tablero{
 		}
 		return elem;
 	}
+	get balas(){
+		return this._balas;
+	}
 	// ------ Funciones ------ //
 	// Funcion que inserta un objeto en una casilla en la fila y columna indicados
 	insertar(objeto,columna,fila){
@@ -63,8 +66,10 @@ class Tablero{
 		if (delante){
 			if(delante.con == null){
 				this.insertar(objeto,delante.pos.x,delante.pos.y);
-				console.log(posicion)
 				this._tablero[posicion.x][posicion.y].con = null;
+				if (objeto.tipo=="bala"){
+					this._balas.set(objeto.id,objeto);
+				}
 			} else {
 				if (objeto.tipo == "tanque"){
 					if (delante.con.tipo == "tanque"){
@@ -74,21 +79,24 @@ class Tablero{
 						objeto.vida--;
 					} else if (delante.con.tipo == "bala"){
 						objeto.vida--;
-						this._balas.delete(delante.pos);
+						console.log("test")
+						console.log(delante.con.id)
+						console.log(this._balas.get(delante.con.id));
+						this._balas.delete(delante.con.id);
 						this.insertar(objeto,delante.pos.x,delante.pos.y);
 						this._tablero[posicion.x][posicion.y].con = null;
 					}
 				} else if (objeto.tipo == "bala"){
 					if (delante.con.tipo == "tanque"){
 						delante.con.vida--;
-						this._balas.delete(objeto.pos);
+						this._balas.delete(objeto.id);
 						this._tablero[posicion.x][posicion.y].con = null;
 					} else if (delante.con.tipo == "roca") {
-						this._balas.delete(objeto.pos);
+						this._balas.delete(objeto.id);
 						this._tablero[posicion.x][posicion.y].con = null;
 					} else if (delante.con.tipo == "bala"){
-						this._balas.delete(objeto.pos);
-						this._balas.delete(delante.pos);
+						this._balas.delete(objeto.id);
+						this._balas.delete(delante.con.id);
 						this._tablero[delante.pos.x][delante.pos.y].con = null;
 						this._tablero[posicion.x][posicion.y].con = null;
 					}
@@ -96,7 +104,7 @@ class Tablero{
 			}
 		} else {
 			if (objeto.tipo =="bala"){
-				this._balas.delete(objeto.pos);
+				this._balas.delete(objeto.id);
 				this._tablero[posicion.x][posicion.y].con = null;
 			}
 		}
@@ -120,16 +128,17 @@ class Tablero{
 			objeto.muni--;
 			if(delante){
 				if (delante.con == null){
-					let bala = new elementos.bala(posicion.o)
+					let bala = new elementos.bala(contarBala,posicion.o);
 					// Y aqui tienes otro mas
 					this.insertar(bala,delante.pos.x,delante.pos.y);
-					this._balas.set(bala.pos,bala);
+					this._balas.set(contarBala,bala);
+					contarBala++;
 				} else {
 					if(delante.con.tipo=="tanque"){
 						delante.con.vida--;
 					}
 					if(delante.con.tipo=="bala"){
-						this._balas.delete(delante.pos);
+						this._balas.delete(delante.con.id);
 						this._tablero[delante.pos.x][delante.pos.y].con = null;
 					}
 				}
