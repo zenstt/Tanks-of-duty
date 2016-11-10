@@ -54,8 +54,7 @@ class Tablero{
 		}
 	}
 
-	insertarTanque(nombre,x,y){
-		let tanque = new elementos.tanque(nombre);
+	insertarTanque(tanque,x,y){
 		this.insertar(tanque,x,y);
 		this._tanques.set(tanque.nombre,tanque);
 	}
@@ -124,6 +123,7 @@ class Tablero{
 				this._tablero[posicion.x][posicion.y].con = null;
 			}
 		}
+		return objeto;
 	}
 
 	girar(id,direccion){
@@ -135,6 +135,7 @@ class Tablero{
 			case "izquierda": objeto.o = index==0 ? orientaciones[orientaciones.length-1]:orientaciones[index-1];break;
 			default: console.log("Error en la direccion de giro");
 		}
+		return objeto;
 	}
 	// esto es un comentario
 	disparar(id){
@@ -162,6 +163,7 @@ class Tablero{
 				}
 			}
 		}
+		return objeto;
 	}
 
 	moverBalas(){
