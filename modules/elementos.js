@@ -1,25 +1,34 @@
 "use strict";
-var direcciones=["norte", "sur", "este", "oeste"]
-// Clase que define el objeto tanque del juego
+var direcciones = ["norte", "sur", "este", "oeste"]
+	// Clase que define el objeto tanque del juego
 class Tanque {
 	/**
 	 * Crea un tanque con un nombre que servirá como id
 	 * @param  {string} nombre nombre del tanque
+	 * @param  {string} o orientación del tanque, si no se da este parámetro, se pondrá una orientación aleatoria
+	 * @param  {number} vida vida del tanque, si no se da este parámetro, se pondrá en 10
+	 * @param  {number} muni munición máxima del tanque, si no se da este parámetro, se pondrá en 50
 	 * 
 	 * la posición se le dará al insertarla en una casilla
 	 * x representa la posición segun las columnas
 	 * y representa la posición segun las filas
 	 */
-	constructor(nombre, vida, muni, o) {
-			this._nombre = nombre;
-			this._vida = vida || 10;
-			this._tipo = "tanque";
-			this._muni = muni || 50;
-			this._x;
-			this._y;
-			this._o = o || direcciones[Math.floor(Math.random()*4)];
-		}
-		// ------ GETTERS ------ //
+	constructor(nombre, o, vida, muni) {
+		this._nombre = nombre;
+		this._o = o || direcciones[Math.floor(Math.random() * 4)];
+		this._vida = vida || 10;
+		this._muni = muni || 50;
+		//Se guarda el tipo de elemento que es
+		this._tipo = "tanque";
+		this._x;
+		this._y;
+	}
+
+	// ------ GETTERS ------ //
+	/**
+	 * Devuelve la posición x e y del tanque junto a su orientación
+	 * @return {Object} devuelve las variables o,x e y en un objeto JSON
+	 */
 	get pos() {
 		return {
 			x: this._x,
@@ -27,29 +36,63 @@ class Tanque {
 			o: this._o
 		}
 	}
+	/**
+	 * Devuelve el tipo de elemento que es
+	 * @return {string} el tipo dado en el constructor
+	 */
 	get tipo() {
 		return this._tipo;
 	}
+	/**
+	 * Devuelve la munición
+	 * @return {number} la munición dada en el constructor
+	 */
 	get muni() {
 		return this._muni;
 	}
+	/**
+	 * Devuelve la vida
+	 * @return {number} la vida dada en el constructor
+	 */
 	get vida() {
 		return this._vida;
 	}
+	/**
+	 * Devuelve el nombre, que se usará como id
+	 * @return {string} el nombre dado en el constructor
+	 */
 	get nombre() {
-			return this._nombre;
-		}
+		return this._nombre;
+	}
 		// ------ SETTERS ------ //
+	
+	/**
+	 * Cambia el valor de la posición
+	 * @param  {Object} value la posición de la casilla en la que se quiere meter
+	 */
 	set pos(value) {
 		this._x = value.x;
 		this._y = value.y;
 	}
+	/**
+	 * Cambia el valor de la orientación
+	 * @param  {string} value orientación del tanque, debe ser una de 
+	 * las cuatro principales direcciones: "norte", "sur", "este" u "oeste".
+	 */
 	set o(value) {
 		this._o = value;
 	}
+	/**
+	 * Cambia el valor de la vida
+	 * @param  {number} value la vida que le queda al tanque, se usara cuando éste se dañe
+	 */
 	set vida(value) {
 		this._vida = value;
 	}
+	/**
+	 * Cambia el valor de la munición
+	 * @param  {number} value la munición que le queda al tanque, se usara cuando éste dispare
+	 */
 	set muni(value) {
 		this._muni = value;
 	}
@@ -64,11 +107,11 @@ class Roca {
 	 * y representa la posición segun las filas
 	 */
 	constructor() {
-			this._x;
-			this._y;
-			//Se guarda el tipo de elemento que es
-			this._tipo = "roca";
-		}
+		this._x;
+		this._y;
+		//Se guarda el tipo de elemento que es
+		this._tipo = "roca";
+	}
 		// ------ GETTERS ------ //
 
 	/**
@@ -76,23 +119,23 @@ class Roca {
 	 * @return {Object} devuelve las variables x e y en un objeto JSON
 	 */
 	get pos() {
-			return {
-				x: this._x,
-				y: this._y
-			}
+		return {
+			x: this._x,
+			y: this._y
 		}
-		/**
-		 * Devuelve el tipo de elemento que es
-		 * @return {string} el tipo dado en el constructor
-		 */
+	}
+	/**
+	 * Devuelve el tipo de elemento que es
+	 * @return {string} el tipo dado en el constructor
+	 */
 	get tipo() {
-			return this._tipo;
-		}
+		return this._tipo;
+	}
 		// ------ SETTERS ------ //
-		/**
-		 * Cambia el valor de la posición
-		 * @param  {Object} value la posición de la casilla en la que se quiere meter
-		 */
+	/**
+	 * Cambia el valor de la posición
+	 * @param  {Object} value la posición de la casilla en la que se quiere meter
+	 */
 	set pos(value) {
 		this._x = value.x;
 		this._y = value.y;
@@ -113,13 +156,13 @@ class Bala {
 	 * y representa la posición segun las filas
 	 */
 	constructor(id, o) {
-			this._id = id;
-			this._x;
-			this._y;
-			this._o = o;
-			//Se guarda el tipo de elemento que es
-			this._tipo = "bala";
-		}
+		this._id = id;
+		this._x;
+		this._y;
+		this._o = o;
+		//Se guarda el tipo de elemento que es
+		this._tipo = "bala";
+	}
 		// ------ GETTERS ------ //
 
 	/**
@@ -127,26 +170,26 @@ class Bala {
 	 * @return {Object} devuelve las variables o,x e y en un objeto JSON
 	 */
 	get pos() {
-			return {
-				x: this._x,
-				y: this._y,
-				o: this._o
-			}
+		return {
+			x: this._x,
+			y: this._y,
+			o: this._o
 		}
-		/**
-		 * Devuelve el tipo de elemento que es
-		 * @return {string} el tipo dado en el constructor
-		 */
+	}
+	/**
+	 * Devuelve el tipo de elemento que es
+	 * @return {string} el tipo dado en el constructor
+	 */
 	get tipo() {
-			return this._tipo;
-		}
-		/**
-		 * Devuelve el id
-		 * @return {number} el id dado en el constructor
-		 */
+		return this._tipo;
+	}
+	/**
+	 * Devuelve el id
+	 * @return {number} el id dado en el constructor
+	 */
 	get id() {
-			return this._id;
-		}
+		return this._id;
+	}
 		// ------ SETTERS ------ //
 
 	/**
