@@ -47,13 +47,13 @@ class Tablero{
 	// ------ Funciones ------ //
 	// Funcion que inserta un objeto en una casilla en la fila y columna indicados
 	insertar(objeto,columna,fila){
-		console.log(columna+" "+fila)
+		console.log(columna+" "+fila);
 		if (fila>this._filas || fila<0 || columna>this._columnas || columna<0){
 			console.log("Error: Fuera de rango");
 			return 3;
 		} else {
 			if (this.info.length >= (this._filas+1)*(this._columnas+1)){
-				console.log("No hay mas espacio disponible")
+				console.log("No hay mas espacio disponible");
 				return 2;
 			} else {
 				if (this._tablero[columna][fila].con != null){
@@ -70,10 +70,10 @@ class Tablero{
 		let ranTanqueX = Math.floor(Math.random()*(this._columnas+1));
 		let ranTanqueY = Math.floor(Math.random()*(this._filas+1));
 		switch (this.insertar(tanque,ranTanqueX,ranTanqueY)){
-			case 3: return "Error: Fuera de rango";break;
-			case 2: return "Error: No espacio disponible";break;
+			case 3: return "Error: Fuera de rango";
+			case 2: return "Error: Espacio no disponible";
 			case 1: this.insertarTanque(tanque);break;
-			case 0: this._tanques.set(tanque.nombre,tanque);break;
+			case 0: this._tanques.set(tanque.nombre,tanque);return true;
 		}
 	}
 
@@ -81,10 +81,10 @@ class Tablero{
 		let ranRocaX = Math.floor(Math.random()*(this._columnas+1));
 		let ranRocaY = Math.floor(Math.random()*(this._filas+1));
 		switch (this.insertar(new elementos.roca(),ranRocaX,ranRocaY)){
-			case 3: return "Error: Fuera de rango";break;
-			case 2: return "Error: No espacio disponible";break;
+			case 3: return "Error: Fuera de rango";
+			case 2: return "Error: Espacio no disponible";
 			case 1: this.insertarRoca();break;
-			case 0: break;
+			case 0: return true;
 		}
 	}
 	
@@ -92,10 +92,10 @@ class Tablero{
 	casillaDelante(objeto){
 		let pos = objeto.pos;
 		switch (pos.o){
-			case "norte":if(pos.y>0){return this._tablero[pos.x][pos.y-1]} else {return false};break;
-			case "sur":if(pos.y<this._filas){return this._tablero[pos.x][pos.y+1]} else {return false};break;
-			case "este":if(pos.x<this._columnas){return this._tablero[pos.x+1][pos.y]} else {return false};break;
-			case "oeste":if(pos.x>0){return this._tablero[pos.x-1][pos.y]} else {return false};break;
+			case "norte":if(pos.y>0){return this._tablero[pos.x][pos.y-1];} else {return false;}break;
+			case "sur":if(pos.y<this._filas){return this._tablero[pos.x][pos.y+1];} else {return false;}break;
+			case "este":if(pos.x<this._columnas){return this._tablero[pos.x+1][pos.y];} else {return false;}break;
+			case "oeste":if(pos.x>0){return this._tablero[pos.x-1][pos.y];} else {return false;}break;
 			default: console.log("Eso no es una orientacion"); break;
 		}
 	}

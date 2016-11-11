@@ -16,6 +16,7 @@
     "tanques",
     "aulaestudio"
   ],
+  "author": "Denis Couñago / Daniel Miniño"
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.15.2",
