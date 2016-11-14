@@ -21,7 +21,7 @@ class Casilla{
 		return {
 			x:this._x,
 			y:this._y
-		}
+		};
 	}
 	/**
 	 * Devuelve el objeto contenido en la casilla, si no hay nada, se devolverá null
@@ -36,7 +36,7 @@ class Casilla{
 	 * @param  {Object} value el objeto que se quiere meter en la casilla, si no es un objeto, sera un null
 	 */
 	set con(value){
-		if (value != null){
+		if (value !== null){
 			value.pos = {x:this._x,y:this._y};
 		}
 		this._con = value;

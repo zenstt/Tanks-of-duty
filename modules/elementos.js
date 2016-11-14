@@ -1,5 +1,5 @@
 "use strict";
-var direcciones = ["norte", "sur", "este", "oeste"]
+var direcciones = ["norte", "sur", "este", "oeste"];
 	// Clase que define el objeto tanque del juego
 class Tanque {
 	/**
@@ -34,7 +34,7 @@ class Tanque {
 			x: this._x,
 			y: this._y,
 			o: this._o
-		}
+		};
 	}
 	/**
 	 * Devuelve el tipo de elemento que es
@@ -109,6 +109,7 @@ class Roca {
 	constructor() {
 		this._x;
 		this._y;
+		this._vida = 2;
 		//Se guarda el tipo de elemento que es
 		this._tipo = "roca";
 	}
@@ -122,7 +123,10 @@ class Roca {
 		return {
 			x: this._x,
 			y: this._y
-		}
+		};
+	}
+	get vida(){
+		return this._vida;
 	}
 	/**
 	 * Devuelve el tipo de elemento que es
@@ -139,6 +143,9 @@ class Roca {
 	set pos(value) {
 		this._x = value.x;
 		this._y = value.y;
+	}
+	set vida(value){
+		this._vida = value;
 	}
 }
 
@@ -174,7 +181,7 @@ class Bala {
 			x: this._x,
 			y: this._y,
 			o: this._o
-		}
+		};
 	}
 	/**
 	 * Devuelve el tipo de elemento que es

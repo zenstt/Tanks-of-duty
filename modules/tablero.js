@@ -31,7 +31,7 @@ class Tablero{
 		let elem = [];	
 		for (let x = 0;x<=this._columnas;x++){
 			for (let y=0;y<=this._filas;y++){
-				if(this._tablero[x][y].con != null){
+				if(this._tablero[x][y].con !== null){
 					elem.push(this._tablero[x][y].con);
 				}
 			}
@@ -47,7 +47,6 @@ class Tablero{
 	// ------ Funciones ------ //
 	// Funcion que inserta un objeto en una casilla en la fila y columna indicados
 	insertar(objeto,columna,fila){
-		console.log(columna+" "+fila);
 		if (fila>this._filas || fila<0 || columna>this._columnas || columna<0){
 			console.log("Error: Fuera de rango");
 			return 3;
@@ -56,7 +55,7 @@ class Tablero{
 				console.log("No hay mas espacio disponible");
 				return 2;
 			} else {
-				if (this._tablero[columna][fila].con != null){
+				if (this._tablero[columna][fila].con !== null){
 					return 1;
 				} else {
 					this._tablero[columna][fila].con = objeto;
@@ -104,7 +103,7 @@ class Tablero{
 		let delante = this.casillaDelante(objeto);
 		let posicion = objeto.pos;
 		if (delante){
-			if(delante.con == null){
+			if(delante.con === null){
 				this.insertar(objeto,delante.pos.x,delante.pos.y);
 				this._tablero[posicion.x][posicion.y].con = null;
 				if (objeto.tipo=="bala"){
@@ -119,6 +118,7 @@ class Tablero{
 						delante.con.vida-=2;
 						objeto.vida--;
 					} else if (delante.con.tipo == "roca") {
+						delante.con.vida-=2;
 						objeto.vida--;
 					} else if (delante.con.tipo == "bala"){
 						objeto.vida--;
@@ -132,6 +132,7 @@ class Tablero{
 						this._balas.delete(id);
 						this._tablero[posicion.x][posicion.y].con = null;
 					} else if (delante.con.tipo == "roca") {
+						delante.con.vida--;
 						this._balas.delete(id);
 						this._tablero[posicion.x][posicion.y].con = null;
 					} else if (delante.con.tipo == "bala"){
@@ -157,23 +158,20 @@ class Tablero{
 		let index = orientaciones.indexOf(objeto.pos.o);
 		switch (direccion){
 			case "derecha": objeto.o = index==orientaciones.length-1 ? orientaciones[0]:orientaciones[index+1];break;
-			case "izquierda": objeto.o = index==0 ? orientaciones[orientaciones.length-1]:orientaciones[index-1];break;
+			case "izquierda": objeto.o = index===0 ? orientaciones[orientaciones.length-1]:orientaciones[index-1];break;
 			default: console.log("Error en la direccion de giro");
 		}
 		return objeto;
 	}
-	// esto es un comentario
 	disparar(id){	
 		let objeto=this._tanques.get(id);
 		let delante = this.casillaDelante(objeto);
 		let posicion = objeto.pos;
 		if (objeto.muni>0){
-			// Y esto es otro
 			objeto.muni--;
 			if(delante){
-				if (delante.con == null){
+				if (delante.con === null){
 					let bala = new elementos.bala(contarBala,posicion.o);
-					// Y aqui tienes otro mas
 					this.insertar(bala,delante.pos.x,delante.pos.y);
 					this._balas.set(contarBala,bala);
 					contarBala++;
@@ -187,8 +185,8 @@ class Tablero{
 						return false;
 					}
 				}
+				return true;
 			}
-			return true;
 		}
 		return false;
 	}
@@ -197,6 +195,21 @@ class Tablero{
 		for (let bala of this._balas.values()) {
 			this.mover(bala.id);
 		}	
+	}
+
+	limpiarTablero(){
+		let inf = this.info;
+		let tanks = [];
+		for (let obj of inf){
+			if (obj.vida <= 0){		
+				if (obj.tipo =="tanque"){
+					tanks.push(this._tanques.get(obj.nombre));
+					this._tanques.delete(obj.nombre);
+				}
+				this._tablero[obj.pos.x][obj.pos.y].con = null;
+				return tanks;
+			}
+		}
 	}
 
 }
