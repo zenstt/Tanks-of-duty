@@ -15,6 +15,4 @@ server.use(express.static('public'));
 
 server.use('/login',apiLogin);
 
-
-
 server.listen(3000, ()=>console.log('servidor iniciado con express. Escuchando en el puerto 3000'));

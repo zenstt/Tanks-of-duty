@@ -5,7 +5,7 @@ const router=express.Router();
 var mysql=require('mysql');
 var BodyParser = require("body-parser");
 var server = express();
-
+var usuario=require("./usuario.js");
 server.use(BodyParser.json()); //Recibir peticiones POST con datos en json
 server.use(BodyParser.urlencoded({extended:true})); //para formularios en post
 
@@ -21,10 +21,10 @@ server.use(BodyParser.urlencoded({extended:true})); //para formularios en post
 const mysqlconnection = {
     user: "root",
     password: "root",
-    host: "localhost",
+    host: "192.168.0.42",
     port: 3306
 }
-
+let usu = new usuario(1,"a","b","c","d","e");
 /**
  * Esta function sirve para crear un usuario nuevo en la base de datos si no existe ya.
  * @param {String} email - email del usuario. No puede haber 2 usuarios con el mismo email

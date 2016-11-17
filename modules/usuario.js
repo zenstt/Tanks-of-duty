@@ -49,7 +49,7 @@ class usuario{
     }
     // ---- Funciones ------ //
     registrar(){
-        let sql = 'INSERT INTO "usuarios"."usuario" ("IDred", "username", "provider", "photo", "password", "email") VALUES ('+this._id+', '+this._nombre+', '+this._provider+', '+this._foto+', '+this._password+', '+this._correo+');';
+        let sql = 'INSERT INTO "usuarios"."usuario" ("IDred", "username", "provider", "photo", "password", "email") VALUES ("'+this._id+'", "'+this._nombre+'", "'+this._provider+'", "'+this._foto+'", "'+this._password+'", "'+this._correo+'");';
     }
 
 }
