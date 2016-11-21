@@ -53,6 +53,33 @@ class usuario {
 
     // ---- Funciones ------ //
     // // const sql = 'INSERT INTO usuarios.usuario (IDred, username, provider, photo, password, email) VALUES ("' + this._id + '", "' + this._nombre + '", "' + this._provider + '", "' + this._foto + '", "' + this._password + '", "' + this._correo + '");';
+    registrarOneClick(cb) {
+        let IDred=this._id+this._provider[0];
+        const comprobar = 'SELECT * FROM usuarios.usuario where IDred = "' + IDred;
+        const insertar = 'INSERT INTO usuarios.usuario (IDred, username, provider, photo) VALUES ("' + IDred + '", "' + this._nombre + '", "' + this._provider + '", "' + this._foto + '");';
+        let cliente = mysql.createConnection(this._mysqlconnection);
+        cliente.connect((err) => {
+            if (err) {
+                return cb(err, 2);
+            }
+            cliente.query(comprobar, (err, rows) => {
+                if (err) {
+                    return cb(err, 2);
+                } else if (rows.length) {
+                    cliente.end();
+                    return cb(err, 1);
+                } else {
+                    cliente.query(insertar, (err) => {
+                        if (err) {
+                            return cb(err, 2);
+                        } else {
+                            return cb(err, 0);
+                        }
+                    });
+                }
+            });
+        });
+    }
     registrarLocal(cb) {
         const comprobar = 'SELECT * FROM usuarios.usuario where username = "' + this._nombre + '" and provider = "local"';
         const insertar = 'INSERT INTO usuarios.usuario (username, provider, password, email) VALUES ("' + this._nombre + '", "' + this._provider + '", "' + this._password + '", "' + this._email + '");';
