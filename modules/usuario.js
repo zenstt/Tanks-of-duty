@@ -1,12 +1,15 @@
 "use strict";
+var mysql = require('mysql');
+
 class usuario {
-    constructor(nombre) {
+    constructor(nombre,mysqlconnect) {
             this._nombre = nombre;
+            this._mysqlconnection = mysqlconnect;
             this._id = null;
             this._provider = "local";
             this._foto = 'https://avatars1.githubusercontent.com/u/20266135?v=3&s=460';
             this._password = null;
-            this._correo = null;
+            this._email = null;
             this._idtabla;
         }
         // ---- Getters ------ //
@@ -25,8 +28,8 @@ class usuario {
     get password() {
         return this._password;
     }
-    get correo() {
-        return this._correo;
+    get email() {
+        return this._email;
     }
     get idtabla() {
             return this._idtabla;
@@ -34,7 +37,7 @@ class usuario {
         // ---- Setters ------ //
     set local(objeto) {
         this._password = objeto.password;
-        this._correo = objeto.correo;
+        this._email = objeto.email;
     }
     set oneClickLogin(objeto) {
         this._id = objeto.id;
@@ -50,10 +53,10 @@ class usuario {
 
     // ---- Funciones ------ //
     // // const sql = 'INSERT INTO usuarios.usuario (IDred, username, provider, photo, password, email) VALUES ("' + this._id + '", "' + this._nombre + '", "' + this._provider + '", "' + this._foto + '", "' + this._password + '", "' + this._correo + '");';
-    registrarLocal() {
+    registrarLocal(cb) {
         const comprobar = 'SELECT * FROM usuarios.usuario where username = "' + this._nombre + '" and provider = "local"';
-        const insertar = 'INSERT INTO usuarios.usuario (username, provider, password, email) VALUES ("' + this._nombre + '", "' + this._provider + '", "' + this._password + '", "' + this._correo + '");';
-        let cliente = mysql.createConnection(mysqlconnection);
+        const insertar = 'INSERT INTO usuarios.usuario (username, provider, password, email) VALUES ("' + this._nombre + '", "' + this._provider + '", "' + this._password + '", "' + this._email + '");';
+        let cliente = mysql.createConnection(this._mysqlconnection);
         cliente.connect((err) => {
             if (err) {
                 return cb(err, 2);

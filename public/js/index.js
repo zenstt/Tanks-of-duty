@@ -21,10 +21,8 @@ $(document).ready(function(){
 	});
 
 	$('#enviarRegister').click(function(){
-		console.log("Holla")
-		if ($('#nombre').val() && $('#username').val() && $('#email').val() && $('#password').val() && $('#password2').val()){
+		if ($('#username').val() && $('#email').val() && $('#password').val() && $('#password2').val()){
 			var datos={
-				nombre:$('#nombre').val(),
 				username:$('#username').val(),
 				email:$('#email').val(),
 				password:$('#password').val()
