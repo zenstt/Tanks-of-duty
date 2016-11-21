@@ -20,11 +20,11 @@ server.use(BodyParser.urlencoded({extended:true})); //para formularios en post
 **/
 const mysqlconnection = {
     user: "root",
-    password: "root",
-    host: "192.168.0.42",
+    password: "1234",
+    host: "127.0.0.1",
     port: 3306
 }
-let usu = new usuario(1,"a","b","c","d","e");
+let usu = new usuario("pepito");
 /**
  * Esta function sirve para crear un usuario nuevo en la base de datos si no existe ya.
  * @param {String} email - email del usuario. No puede haber 2 usuarios con el mismo email
@@ -34,8 +34,9 @@ let usu = new usuario(1,"a","b","c","d","e");
  * @param {cbCrearUsuario} f - callback (cb)
 */
 function crearUsuario(email, nombre, username, pass, f) {
-    const sql = 'SELECT * FROM usuarios.users where email = "' + email + '"';
-    const sql2 = 'INSERT INTO usuarios.users (email, name, username, password) VALUES("' + email + '", "' + nombre + '", "' + username + '", "' + pass + '")';
+    const sql = 'SELECT * FROM usuarios.usuario where email = "' + email + '"';
+    const sql2 = usu.registrar();
+    // const sql2 = 'INSERT INTO usuarios.users (email, name, username, password) VALUES("' + email + '", "' + nombre + '", "' + username + '", "' + pass + '")';
     let cliente = mysql.createConnection(mysqlconnection);
     cliente.connect(err => {
         if (err) {
@@ -43,6 +44,7 @@ function crearUsuario(email, nombre, username, pass, f) {
             return f(err, 2);
         }
         cliente.query(sql, (err, rows, fields) => {
+            console.log(sql);
             if (err) {
                 console.log("\nProblema interno. Error al buscar duplicados.\n");
                 return f(err, 2);
@@ -56,6 +58,7 @@ function crearUsuario(email, nombre, username, pass, f) {
             else {
 				//Si no existen usuarios con ese email, creo el usuario
                 cliente.query(sql2, (err, result, fields) => {
+                    console.log(sql2)
                     cliente.end();
                     if (err) {
                         console.log("\nNo se creo al usuario. Error al crear el usuario.\n");
