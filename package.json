@@ -1,32 +1,37 @@
 {
-	"name": "Tanks-of-duty",
-	"version": "1.0.0",
-	"description": "La guerra de los tanques",
-	"main": "server.js",
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "node server.js"
-	},
-	"repository": {
-		"type": "git",
-		"url": "tanksofduty"
-	},
-	"keywords": [
-		"nodejs",
-		"tanques",
-		"aulaestudio"
-	],
-	"author": {
-		"name": "Denis Couñago",
-		"name2": "Daniel Miniño",
-		"email": "emailhere",
-		"url": "pagehere"
-	},
-	"license": "ISC",
-	"dependencies": {
-		"body-parser": "^1.15.2",
-		"express": "^4.14.0",
-		"mongoose": "^4.6.5",
-		"mysql": "^2.11.1"
-	}
+  "name": "Tanks-of-duty",
+  "version": "1.0.0",
+  "description": "La guerra de los tanques",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "tanksofduty"
+  },
+  "keywords": [
+    "nodejs",
+    "tanques",
+    "aulaestudio"
+  ],
+  "author": {
+    "name": "Denis Couñago",
+    "name2": "Daniel Miniño",
+    "email": "emailhere",
+    "url": "pagehere"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.14.0",
+    "mongoose": "^4.6.5",
+    "mysql": "^2.11.1",
+    "passport-facebook": "^2.1.1",
+    "passport-google-oauth20": "^1.0.0",
+    "passport-local": "^1.0.0",
+    "passport-twitter": "^1.0.4"
+  }
 }

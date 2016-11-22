@@ -15,4 +15,9 @@ server.use(express.static('public'));
 
 server.use('/login',apiLogin);
 
-server.listen(3000, ()=>console.log('servidor iniciado con express. Escuchando en el puerto 3000'));
+server.get('/juego',(req,res)=>{
+	console.log(req.user)
+	res.send(req.user);
+})
+
+server.listen(3000, ()=>console.log('Servidor comezado con express. Escoitando no porto 3000'));
