@@ -10,8 +10,6 @@ class usuario {
             this._foto = 'https://avatars1.githubusercontent.com/u/20266135?v=3&s=460';
             this._password = null;
             this._email = null;
-            this._idtabla;
-            this._newPassword;
         }
         // ---- Getters ------ //
     get nombre() {
@@ -32,9 +30,6 @@ class usuario {
     get email() {
         return this._email;
     }
-    get idtabla() {
-        return this._idtabla;
-    }
 
     // ---- Setters ------ //
     set local(objeto) {
@@ -49,9 +44,6 @@ class usuario {
     set foto(foto) {
         this._foto = foto;
     }
-    set newPassword(value) {
-        this._newPassword = value;
-    }
     set password(value) {
         this._password = value;
     }
@@ -61,7 +53,7 @@ class usuario {
     OneClick(cb) {
         let IDred = this._id + this._provider[0];
         const comprobar = 'SELECT ID FROM usuarios.usuario where IDred = "' + IDred + '"';
-        const insertar = 'INSERT INTO usuarios.usuario (IDred, username, provider, photo) VALUES ("' + IDred + '", "' + this._nombre + '", "' + this._provider + '", "' + this._foto + '");';
+        const insertar = 'INSERT INTO usuarios.usuario (IDred, username, provider, photo) VALUES ("' + IDred + '", "' + this._nombre + '", "' + this._provider + '", "' + this._foto + '");SELECT @@IDENTITY AS ID;';
         let cliente = mysql.createConnection(this._mysqlconnection);
         cliente.connect((err) => {
             if (err) {
@@ -74,17 +66,11 @@ class usuario {
                     cliente.end();
                     return cb(err, 1, rows[0].ID);
                 } else {
-                    cliente.query(insertar, (err) => {
+                    cliente.query(insertar, (err, rows) => {
                         if (err) {
                             return cb(err, 2);
                         } else {
-                            cliente.query(comprobar, (err,rows) => {
-                                if (err) {
-                                    return cb(err, 2);
-                                } else {
-                                    return cb(err, 1, rows[0].ID);
-                                }
-                            });
+                            return cb(err, 0, rows[0].ID)
                         }
                     });
                 }
@@ -93,7 +79,7 @@ class usuario {
     }
     registrarLocal(cb) {
         const comprobar = 'SELECT * FROM usuarios.usuario where username = "' + this._nombre + '" and provider = "local"';
-        const insertar = 'INSERT INTO usuarios.usuario (username, provider, password, email) VALUES ("' + this._nombre + '", "' + this._provider + '", "' + this._password + '", "' + this._email + '");';
+        const insertar = 'INSERT INTO usuarios.usuario (username, provider, password, email) VALUES ("' + this._nombre + '", "' + this._provider + '", "' + this._password + '", "' + this._email + '");SELECT @@IDENTITY AS ID;';
         let cliente = mysql.createConnection(this._mysqlconnection);
         cliente.connect((err) => {
             if (err) {
@@ -106,12 +92,12 @@ class usuario {
                     cliente.end();
                     return cb(err, 1);
                 } else {
-                    cliente.query(insertar, (err) => {
+                    cliente.query(insertar, (err, rows) => {
                         cliente.end();
                         if (err) {
                             return cb(err, 2);
                         } else {
-                            return cb(err, 0);
+                            return cb(err, 0, rows[0].ID);
                         }
                     });
                 }
@@ -133,6 +119,59 @@ class usuario {
                     return cb(err, 0, rows[0].ID);
                 } else {
                     return cb(err, 1)
+                }
+            });
+        });
+    }
+    getDataById(id, cb) {
+        const buscar = 'SELECT (username,provider,photo,email) FROM usuarios.usuario where ID = "' + id + '"';
+        let cliente = mysql.createConnection(this._mysqlconnection);
+        cliente.connect((err) => {
+            if (err) {
+                return cb(err, 2);
+            }
+            cliente.query(buscar, (err, rows) => {
+                cliente.end();
+                if (err) {
+                    return cb(err, 2);
+                } else if (rows.length) {
+                    return cb(err, 0, rows[0]);
+                } else {
+                    return cb(err, 1)
+                }
+            });
+        });
+    }
+    editarUsuario(id, cb) {
+        const modificar = "UPDATE `usuarios`.`usuario` SET `username`='" + this._nombre + "', photo='" + this._foto + "',email='" + this._email + "' WHERE `ID`='" + id + "'";
+        let cliente = mysql.createConnection(this._mysqlconnection);
+        cliente.connect((err) => {
+            if (err) {
+                return cb(err, 2);
+            }
+            cliente.query(modificar, (err) => {
+                cliente.end();
+                if (err) {
+                    return cb(err, 2);
+                } else {
+                    return cb(err, 0);
+                }
+            });
+        });
+    }
+    cambiarContra(id, cb) {
+        const modificar = "UPDATE `usuarios`.`usuario` SET `password`='" + this._password + "' WHERE `ID`='" + id + "'";
+        let cliente = mysql.createConnection(this._mysqlconnection);
+        cliente.connect((err) => {
+            if (err) {
+                return cb(err, 2);
+            }
+            cliente.query(modificar, (err) => {
+                cliente.end();
+                if (err) {
+                    return cb(err, 2);
+                } else {
+                    return cb(err, 0);
                 }
             });
         });
