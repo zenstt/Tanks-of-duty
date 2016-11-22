@@ -55,7 +55,7 @@ class usuario {
     // // const sql = 'INSERT INTO usuarios.usuario (IDred, username, provider, photo, password, email) VALUES ("' + this._id + '", "' + this._nombre + '", "' + this._provider + '", "' + this._foto + '", "' + this._password + '", "' + this._correo + '");';
     OneClick(cb) {
         let IDred = this._id + this._provider[0];
-        const comprobar = 'SELECT * FROM usuarios.usuario where IDred = "' + IDred;
+        const comprobar = 'SELECT * FROM usuarios.usuario where IDred = "' + IDred+'"';
         const insertar = 'INSERT INTO usuarios.usuario (IDred, username, provider, photo) VALUES ("' + IDred + '", "' + this._nombre + '", "' + this._provider + '", "' + this._foto + '");';
         let cliente = mysql.createConnection(this._mysqlconnection);
         cliente.connect((err) => {
@@ -108,7 +108,7 @@ class usuario {
         });
     }
     logLocal(cb) {
-        const comprobar = 'SELECT * FROM usuarios.usuario where username = "' + this._nombre + '" and provider = "local"';
+        const comprobar = 'SELECT * FROM usuarios.usuario where username = "' + this._nombre + '" and provider = "local" and password="' + this._password + '"';
         let cliente = mysql.createConnection(this._mysqlconnection);
         cliente.connect((err) => {
             if (err) {
