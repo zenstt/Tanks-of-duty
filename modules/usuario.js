@@ -11,6 +11,7 @@ class usuario {
             this._password = null;
             this._email = null;
             this._idtabla;
+            this._newPassword;
         }
         // ---- Getters ------ //
     get nombre() {
@@ -32,9 +33,10 @@ class usuario {
         return this._email;
     }
     get idtabla() {
-            return this._idtabla;
-        }
-        // ---- Setters ------ //
+        return this._idtabla;
+    }
+
+    // ---- Setters ------ //
     set local(objeto) {
         this._password = objeto.password;
         this._email = objeto.email;
@@ -47,6 +49,9 @@ class usuario {
     set foto(foto) {
         this._foto = foto;
     }
+    set newPassword(value) {
+        this._newPassword = value;
+    }
     set password(value) {
         this._password = value;
     }
@@ -55,7 +60,7 @@ class usuario {
     // // const sql = 'INSERT INTO usuarios.usuario (IDred, username, provider, photo, password, email) VALUES ("' + this._id + '", "' + this._nombre + '", "' + this._provider + '", "' + this._foto + '", "' + this._password + '", "' + this._correo + '");';
     OneClick(cb) {
         let IDred = this._id + this._provider[0];
-        const comprobar = 'SELECT * FROM usuarios.usuario where IDred = "' + IDred+'"';
+        const comprobar = 'SELECT ID FROM usuarios.usuario where IDred = "' + IDred + '"';
         const insertar = 'INSERT INTO usuarios.usuario (IDred, username, provider, photo) VALUES ("' + IDred + '", "' + this._nombre + '", "' + this._provider + '", "' + this._foto + '");';
         let cliente = mysql.createConnection(this._mysqlconnection);
         cliente.connect((err) => {
@@ -67,13 +72,19 @@ class usuario {
                     return cb(err, 2);
                 } else if (rows.length) {
                     cliente.end();
-                    return cb(err, 1);
+                    return cb(err, 1, rows[0].ID);
                 } else {
                     cliente.query(insertar, (err) => {
                         if (err) {
                             return cb(err, 2);
                         } else {
-                            return cb(err, 0);
+                            cliente.query(comprobar, (err,rows) => {
+                                if (err) {
+                                    return cb(err, 2);
+                                } else {
+                                    return cb(err, 1, rows[0].ID);
+                                }
+                            });
                         }
                     });
                 }
@@ -108,7 +119,7 @@ class usuario {
         });
     }
     logLocal(cb) {
-        const comprobar = 'SELECT * FROM usuarios.usuario where username = "' + this._nombre + '" and provider = "local" and password="' + this._password + '"';
+        const comprobar = 'SELECT ID FROM usuarios.usuario where username = "' + this._nombre + '" and provider = "local" and password="' + this._password + '"';
         let cliente = mysql.createConnection(this._mysqlconnection);
         cliente.connect((err) => {
             if (err) {
@@ -119,9 +130,9 @@ class usuario {
                 if (err) {
                     return cb(err, 2);
                 } else if (rows.length) {
-                    return cb(err, 0);
-                }else{
-                    return cb(err,1)
+                    return cb(err, 0, rows[0].ID);
+                } else {
+                    return cb(err, 1)
                 }
             });
         });
