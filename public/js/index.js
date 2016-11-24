@@ -12,10 +12,9 @@ $(document).ready(function(){
 				data: datos,
 				method: 'POST',
 				success: function(res, textStatus, xhr){
-					console.log(res);
 					if(res.login){
 						$('#error').html('Login correcto');
-						$('#juego').load(res.url)
+						window.location.replace(res.url);
 					}
 				}
 			});
@@ -37,13 +36,20 @@ $(document).ready(function(){
 					data: datos,
 					method: 'POST',
 					success: function(res, textStatus, xhr){
-						console.log(res);
 						if(res.creado){
-							$('#error').html('Conta creada correctamente')
-							$('#juego').load(res.url)
+							$.ajax({
+								url:'/login/login',
+								data: datos,
+								method: 'POST',
+								success: function(res, textStatus, xhr){
+									if(res.login){
+										$('#error').html('Login correcto');
+										window.location.replace(res.url);
+									}
+								}
+							});
 						}
 					}
-						
 				});
 			} else {
 				$('#error').html('O contrasinal non coincide.')

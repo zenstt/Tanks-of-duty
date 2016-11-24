@@ -1,7 +1,6 @@
 "use strict"
 //API para todo lo relacionado la gestión de usuarios, login, registro, modificación
 var express = require('express');
-const router = express.Router();
 var mysql = require('mysql');
 var BodyParser = require("body-parser");
 const cookieParser=require("cookie-parser");
@@ -13,6 +12,8 @@ const LocalStrategy = require('passport-local').Strategy;
 const TwitterStrategy = require('passport-twitter').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
+
+const router = express.Router();
 
 router.use(cookieParser());
 router.use(expressSession({
@@ -97,7 +98,7 @@ router.post('/register', (req, res) => {
     crearUsuario(req.body.username, req.body.password, req.body.email, (err, num, id) => {
         switch (num) {
             case 1:
-                infoLogin.error = "Xa existe o usuario na database.";
+                    infoLogin.error = "Xa existe o usuario na database.";
                 break;
             case 2:
                 infoLogin.error = "Erro interno na conexion ca database.";
@@ -112,10 +113,7 @@ router.post('/register', (req, res) => {
             console.log(infoLogin.error);
         } else {
             console.log("Rexistrado correctamente na database")
-            req.session.IDusuario = id;
-            console.log(req.session);
         }
-
         res.json(infoLogin);
         res.end();
     })
@@ -150,6 +148,7 @@ passport.use(new LocalStrategy(function(username,password,done){
             return done(null,{id:id});
         }    
     });
+
 }));
 // -------- ONE CLICK CON TWITTER, FACEBOOK, GOOGLE -------- //
 passport.use(new TwitterStrategy({
@@ -157,7 +156,6 @@ passport.use(new TwitterStrategy({
     consumerSecret:config.twitter.secret,
     callback:'http://localhost:3000/login/auth/twittter/callback'
 },(token, tokenSecret, profile, done)=>{
-    console.log("he pasado por aqui 2")
     done(null, {userid:123,name:"federico"});
 }));
 
@@ -167,7 +165,6 @@ passport.use(new FacebookStrategy({
     callbackURL: 'http://localhost:3000/login/auth/facebook/callback'
 },
 function(token, refreshToken, profile, done) {
-
     done(null,profile);
 }));
 
@@ -183,7 +180,6 @@ passport.use(new GoogleStrategy({
 ));
 
 passport.serializeUser(function(user,done){
-    console.log("he pasado por aqui 1")
     done(null,user);
 });
 
@@ -194,19 +190,27 @@ passport.deserializeUser(function(user,done){
 router.use(passport.initialize());
 router.use(passport.session());
 
-router.post('/login', passport.authenticate('local',{
-        successRedirect: '/juego',
-        failureRedirect: '/login'
-    })
+router.post('/login', passport.authenticate('local'),function(req,res){
+        if (req.isAuthenticated()){
+            res.json({
+                login: true,
+                url: '/juego'
+            });
+        } else {
+            res.json({
+                login: false,
+                url: '/login'
+            });
+        }
+    }
 );
 
 router.get('/auth/twitter',passport.authenticate('twitter'));
 router.get('/auth/twitter/callback',passport.authenticate('twitter', {
-    failureRedirect: '/login' 
-}),function(req, res) {
-    console.log(req.user)
-    res.redirect('/juego');
-})
+    failureRedirect: '/login',
+    successRedirect: '/juego'
+}));
+
 // router.get('/auth/twitter',passport.authenticate('twitter'));
 // router.get('/auth/twitter/callback',
 //  passport.authenticate('twitter',{
@@ -229,5 +233,9 @@ router.get('/auth/google/callback',
         failureRedirect : '/login'
     })
 );
+
+router.get('/',function(req,res){
+    res.redirect('/');
+})
 // -------- TERMINA ONE CLICK -------- //
 module.exports = router;

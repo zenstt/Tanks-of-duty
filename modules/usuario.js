@@ -52,7 +52,7 @@ class usuario {
     OneClick(cb) {
         let IDred = this._id + this._provider[0];
         const comprobar = 'SELECT ID FROM usuarios.usuario where IDred = "' + IDred + '"';
-        const insertar = 'INSERT INTO usuarios.usuario (IDred, username, provider, photo) VALUES ("' + IDred + '", "' + this._nombre + '", "' + this._provider + '", "' + this._foto + '");SELECT @@IDENTITY AS ID;';
+        const insertar = 'INSERT INTO usuarios.usuario (IDred, username, provider, photo) VALUES ("' + IDred + '", "' + this._nombre + '", "' + this._provider + '", "' + this._foto + '");';
         let cliente = mysql.createConnection(this._mysqlconnection);
         cliente.connect((err) => {
             if (err) {
@@ -69,7 +69,7 @@ class usuario {
                         if (err) {
                             return cb(err, 2);
                         } else {
-                            return cb(err, 0, rows[0].ID)
+                            return cb(err, 0, rows.insertId);
                         }
                     });
                 }
@@ -78,7 +78,7 @@ class usuario {
     }
     registrarLocal(cb) {
         const comprobar = 'SELECT * FROM usuarios.usuario where username = "' + this._nombre + '" and provider = "local"';
-        const insertar = 'INSERT INTO usuarios.usuario (username, provider, password, email) VALUES ("' + this._nombre + '", "' + this._provider + '", "' + this._password + '", "' + this._email + '");SELECT @@IDENTITY AS ID;';
+        const insertar = 'INSERT INTO usuarios.usuario (username, provider, password, email) VALUES ("' + this._nombre + '", "' + this._provider + '", "' + this._password + '", "' + this._email + '");';
         let cliente = mysql.createConnection(this._mysqlconnection);
         cliente.connect((err) => {
             if (err) {
@@ -96,7 +96,7 @@ class usuario {
                         if (err) {
                             return cb(err, 2);
                         } else {
-                            return cb(err, 0, rows[0].ID);
+                            return cb(err, 0, rows.insertId);
                         }
                     });
                 }
