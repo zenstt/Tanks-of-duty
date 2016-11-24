@@ -22,6 +22,7 @@ class Tanque {
 		this._tipo = "tanque";
 		this._x;
 		this._y;
+		this._IA="/";
 	}
 
 	// ------ GETTERS ------ //
@@ -64,6 +65,13 @@ class Tanque {
 	get nombre() {
 		return this._nombre;
 	}
+	/**
+	 * Devuelve la url de su IA asignada
+	 * @return {string} la IA dada en el setter
+	 */
+	get IA() {
+		return this._IA;
+	}
 		// ------ SETTERS ------ //
 	
 	/**
@@ -95,6 +103,13 @@ class Tanque {
 	 */
 	set muni(value) {
 		this._muni = value;
+	}
+	/**
+	 * Cambia el valor de la IA
+	 * @param  {string} value la url de su IA asignada
+	 */
+	set IA(value) {
+		this._IA = value;
 	}
 }
 

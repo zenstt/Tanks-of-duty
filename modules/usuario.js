@@ -1,6 +1,5 @@
 "use strict";
 var mysql = require('mysql');
-
 class usuario {
     constructor(nombre, mysqlconnect) {
             this._nombre = nombre;
@@ -143,7 +142,7 @@ class usuario {
         });
     }
     editarUsuario(id, cb) {
-        const modificar = "UPDATE `usuarios`.`usuario` SET `username`='" + this._nombre + "', photo='" + this._foto + "',email='" + this._email + "' WHERE `ID`='" + id + "'";
+        const modificar = "UPDATE usuarios.usuario SET username='" + this._nombre + "', photo='" + this._foto + "',email='" + this._email + "' WHERE ID='" + id + "'";
         let cliente = mysql.createConnection(this._mysqlconnection);
         cliente.connect((err) => {
             if (err) {
@@ -160,13 +159,83 @@ class usuario {
         });
     }
     cambiarContra(id, cb) {
-        const modificar = "UPDATE `usuarios`.`usuario` SET `password`='" + this._password + "' WHERE `ID`='" + id + "'";
+        const modificar = "UPDATE usuarios.usuario SET password='" + this._password + "' WHERE ID='" + id + "'";
         let cliente = mysql.createConnection(this._mysqlconnection);
         cliente.connect((err) => {
             if (err) {
                 return cb(err, 2);
             }
             cliente.query(modificar, (err) => {
+                cliente.end();
+                if (err) {
+                    return cb(err, 2);
+                } else {
+                    return cb(err, 0);
+                }
+            });
+        });
+    }
+    consultarTanques(id, cb) {
+        const buscar = 'SELECT (ID,nombre,hp,ammo,urlia) FROM usuarios.tanque where usuario = "' + id + '"';
+        let cliente = mysql.createConnection(this._mysqlconnection);
+        cliente.connect((err) => {
+            if (err) {
+                return cb(err, 2);
+            }
+            cliente.query(buscar, (err, rows) => {
+                cliente.end();
+                if (err) {
+                    return cb(err, 2);
+                } else if (rows.length) {
+                    return cb(err, 0, rows);
+                } else {
+                    return cb(err, 1)
+                }
+            });
+        });
+    }
+    crearTanque(id, tanque, cb) {
+        const crear = "INSERT INTO usuarios.tanque (nombre, hp, ammo, urlia, usuario) VALUES ('" + tanque.nombre + "', '" + tanque.vida + "', '" + tanque.muni + "', '" + tanque.IA + "', '" + id + "');";
+        let cliente = mysql.createConnection(this._mysqlconnection);
+        cliente.connect((err) => {
+            if (err) {
+                return cb(err, 2);
+            }
+            cliente.query(crear, (err, rows) => {
+                cliente.end();
+                if (err) {
+                    return cb(err, 2);
+                } else {
+                    return cb(err, 0);
+                }
+            });
+        });
+    }
+    borrarTanque(id, idtanque, cb) {
+        const borrar = "DELETE FROM usuarios.tanque WHERE ID='" + idtanque + "' and usuario='" + id + "';";
+        let cliente = mysql.createConnection(this._mysqlconnection);
+        cliente.connect((err) => {
+            if (err) {
+                return cb(err, 2);
+            }
+            cliente.query(borrar, (err, rows) => {
+                cliente.end();
+                if (err) {
+                    return cb(err, 2);
+                } else {
+                    return cb(err, 0);
+                }
+            });
+        });
+    }
+    modificarTanque(id, tanque, idtanque, cb) {
+        const modificar = "UPDATE usuarios.tanque SET nombre='" + tanque.nombre + "', hp='" + tanque.vida + "', ammo='" + tanque.muni + "', urlia='" + tanque.IA + "' WHERE ID='" + idtanque + "' and usuario='" + id + "';";
+        let cliente = mysql.createConnection(this._mysqlconnection);
+        cliente.connect((err) => {
+            if (err) {
+                return cb(err, 2);
+            }
+            cliente.query(modificar, (err, rows) => {
                 cliente.end();
                 if (err) {
                     return cb(err, 2);
