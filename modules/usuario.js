@@ -48,7 +48,24 @@ class usuario {
     }
 
     // ---- Funciones ------ //
-    // // const sql = 'INSERT INTO usuarios.usuario (IDred, username, provider, photo, password, email) VALUES ("' + this._id + '", "' + this._nombre + '", "' + this._provider + '", "' + this._foto + '", "' + this._password + '", "' + this._correo + '");';
+    /**
+     * Se encarga del registro de usuario por one Click(Twitter,Facebook y Google)
+     *      
+     * la IDred será una combinación de la id propia del usuario y la primera letra de su provider
+     * 
+     * primero hace una comprobación de si el usuario existe en nuestra base de datos con la query comprobar,
+     * si no, lo meterá en la base de datos
+     * 
+     * si no conecta devolvera un error, y un 2:este es un error interno
+     * si conecta, y encuentra que el usuario ya existe devolvera un 1 y la id del usuario en nuesta base de datos
+     * en caso de que no, al meterlo en la base de datos, devolvera un 0 y la id del usuario en nuesta base de datos
+     *
+     * 1 y 0 son tecnicamente lo mismo para la callback, pero lo dejo por si es necesario hacer algo con 
+     * los usuarios nuevos
+     * 
+     * @param {Function} cb Callback que hará lo necesario: le devolvemos el error, el codigo dado 
+     * y la id en nuestra base de datos
+     */
     OneClick(cb) {
         let IDred = this._id + this._provider[0];
         const comprobar = 'SELECT ID FROM usuarios.usuario where IDred = "' + IDred + '"';
@@ -76,6 +93,21 @@ class usuario {
             });
         });
     }
+
+     /**
+     * Se encarga del registro de usuario local
+     *
+     * primero hace una comprobación de si el usuario existe en nuestra base de datos con la query comprobar,
+     * si no, lo meterá en la base de datos
+     * 
+     * si no conecta devolvera un error, y un 2: este es un error interno
+     * si conecta, y encuentra que el usuario ya existe devolvera un 1 : significara que el usuario local ya existe
+     * en caso de que no, al meterlo en la base de datos, devolvera un 0 y la id del usuario en nuesta base de datos
+     * 
+     * @param {Function} cb Callback que hará lo necesario: le devolvemos el error, el codigo dado 
+     * y la id en nuestra base de datos
+     * @return {Function}    cb
+     */
     registrarLocal(cb) {
         const comprobar = 'SELECT * FROM usuarios.usuario where username = "' + this._nombre + '" and provider = "local"';
         const insertar = 'INSERT INTO usuarios.usuario (username, provider, password, email) VALUES ("' + this._nombre + '", "' + this._provider + '", "' + this._password + '", "' + this._email + '");';
@@ -103,6 +135,19 @@ class usuario {
             });
         });
     }
+    /**
+     * Se encarga del login de usuario local
+     *
+     * hace una comprobación de si el usuario existe en nuestra base de datos con la query comprobar
+     * 
+     * si no conecta devolvera un error, y un 2: este es un error interno
+     * si conecta, y no encuentra el usuario devolvera un 1 : significara que el usuario local no existe
+     * en caso de encontrarlo devolvera un 0 y la id del usuario en nuesta base de datos
+     * 
+     * @param {Function} cb Callback que hará lo necesario: le devolvemos el error, el codigo dado 
+     * y la id en nuestra base de datos
+     * @return {Function}    cb
+     */
     logLocal(cb) {
         const comprobar = 'SELECT ID FROM usuarios.usuario where username = "' + this._nombre + '" and provider = "local" and password="' + this._password + '"';
         let cliente = mysql.createConnection(this._mysqlconnection);
@@ -122,8 +167,19 @@ class usuario {
             });
         });
     }
+    /**
+     * Se encarga de recoger la info del usuario local desde la base de datos por la id
+     * 
+     * si no conecta devolvera un error, y un 2: este es un error interno
+     * si conecta, y no encuentra el usuario devolvera un 1 : significara que el usuario local no existe
+     * en caso de encontrarlo devolvera un 0 y la informacion del usuario en nuesta base de datos
+     * 
+     * @param  {number}   id id propia de nuestra base de datos
+     * @param  {Function} cb Callback que hará lo necesario: le devolvemos el error, el codigo dado y los datos del usuario con esa id
+     * @return {Function}    cb
+     */
     getDataById(id, cb) {
-        const buscar = 'SELECT (username,provider,photo,email) FROM usuarios.usuario where ID = "' + id + '"';
+        const buscar = 'SELECT ID,username,provider,photo,email FROM usuarios.usuario where ID = "' + id + '"';
         let cliente = mysql.createConnection(this._mysqlconnection);
         cliente.connect((err) => {
             if (err) {
