@@ -18,6 +18,36 @@ USE `usuarios`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `tanque`
+--
+
+DROP TABLE IF EXISTS `tanque`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tanque` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(100) DEFAULT NULL,
+  `hp` int(11) DEFAULT NULL,
+  `ammo` int(11) DEFAULT NULL,
+  `urlia` varchar(200) DEFAULT NULL,
+  `usuario` int(11) NOT NULL,
+  PRIMARY KEY (`ID`,`usuario`),
+  KEY `fk_tanque_usuario_idx` (`usuario`),
+  CONSTRAINT `fk_tanque_usuario` FOREIGN KEY (`usuario`) REFERENCES `usuario` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tanque`
+--
+
+LOCK TABLES `tanque` WRITE;
+/*!40000 ALTER TABLE `tanque` DISABLE KEYS */;
+INSERT INTO `tanque` VALUES (1,'a',1,1,'a',1);
+/*!40000 ALTER TABLE `tanque` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `usuario`
 --
 
@@ -33,7 +63,7 @@ CREATE TABLE `usuario` (
   `password` varchar(30) DEFAULT NULL,
   `email` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,7 +72,7 @@ CREATE TABLE `usuario` (
 
 LOCK TABLES `usuario` WRITE;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` VALUES (1,'1','a',NULL,NULL,NULL,NULL);
+INSERT INTO `usuario` VALUES (1,NULL,'a','local',NULL,'a','a');
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -55,4 +85,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-17 20:28:27
+-- Dump completed on 2016-11-24 19:10:38
