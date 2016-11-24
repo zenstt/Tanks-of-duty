@@ -152,9 +152,9 @@ passport.use(new FacebookStrategy({
     function(token, refreshToken, profile, done) {
         let datos = {
             id: profile.id,
-            username: profile.displayName.replace(" ",""),
+            username: profile.displayName.replace(" ", ""),
             provider: profile.provider,
-            foto: 'graph.facebook.com/'+profile.id+'/picture'
+            foto: 'graph.facebook.com/' + profile.id + '/picture'
         }
         compOneClick(datos, done);
     }));
@@ -168,7 +168,7 @@ passport.use(new GoogleStrategy({
         console.log(profile)
         let datos = {
             id: profile.id,
-            username: profile.displayName.replace(" ",""),
+            username: profile.displayName.replace(" ", ""),
             provider: profile.provider,
             foto: profile.photos[0].value
         }
@@ -177,11 +177,23 @@ passport.use(new GoogleStrategy({
 ));
 
 passport.serializeUser(function(user, done) {
-    done(null, user);
+    done(null, user.id);
 });
 
 passport.deserializeUser(function(user, done) {
-    done(null, user);
+    let usu = new usuario('deserialize', mysqlconnection);
+    usu.getDataById(user, (err, num, data) => {
+        console.log(data);
+        if (num == 0) {
+            done(null, data);
+        } else {
+            console.log(err);
+            return done(null, false, {
+                message: "Error interno"
+            });
+        }
+    })
+
 });
 
 router.use(passport.initialize());
@@ -206,13 +218,6 @@ router.get('/auth/twitter/callback', passport.authenticate('twitter', {
     failureRedirect: '/login',
     successRedirect: '/juego'
 }));
-
-// router.get('/auth/twitter',passport.authenticate('twitter'));
-// router.get('/auth/twitter/callback',
-//  passport.authenticate('twitter',{
-//     successRedirect: '/juego',
-//     failureRedirect: '/login'
-// }));
 
 router.get('/auth/facebook', passport.authenticate('facebook', {
     scope: 'email'
