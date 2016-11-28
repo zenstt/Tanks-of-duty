@@ -22,15 +22,6 @@ router.use(expressSession({
     saveUninitialized: false
 }));
 
-/**
-* Cadena de conexión. Actualizar según cada caso.
-        const mysqlconnection={
-            user: "user",
-            password: "1234zxcvbnm",
-            host: "mydb.cjob5ak1qqfi.eu-west-1.rds.amazonaws.com",
-            port: 3306
-        }
-**/
 const mysqlconnection = {
     user: "zenstt",
     password: "1234",
@@ -183,7 +174,6 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(user, done) {
     let usu = new usuario('deserialize', mysqlconnection);
     usu.getDataById(user, (err, num, data) => {
-        console.log(data);
         if (num == 0) {
             done(null, data);
         } else {

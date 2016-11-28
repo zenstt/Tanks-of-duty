@@ -11,6 +11,10 @@ var config={
 	google:{
 		id:"121631020945-4ja6vn6ggm4cic6gfchu15lck5r5d123.apps.googleusercontent.com",
 		secret:"rXDYpZTsHuy5FcL_4dfahj3I"
+	},
+	mongo:{
+		url:'mongodb://52.57.173.168:27017/db'
 	}
+
 }
 module.exports = config

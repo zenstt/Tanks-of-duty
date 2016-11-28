@@ -1,5 +1,11 @@
 "use strict";
 $(document).ready(function(){
+	// $.ajax({
+	// 	url:'/iniciarPartida',
+	// 	success:function(res,textStatus,xhr){
+	// 		console.log(res.map.);
+	// 	}
+	// });
 	$('#enviar').click(function(){
 		if ($('#username').val() && $('#password').val()){
 			console.log("asdasd")
@@ -36,6 +42,7 @@ $(document).ready(function(){
 					data: datos,
 					method: 'POST',
 					success: function(res, textStatus, xhr){
+						console.log("hoooolaaaa")
 						if(res.creado){
 							$.ajax({
 								url:'/login/login',
