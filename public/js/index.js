@@ -8,7 +8,6 @@ $(document).ready(function(){
 	// });
 	$('#enviar').click(function(){
 		if ($('#username').val() && $('#password').val()){
-			console.log("asdasd")
 			var datos={
 				username:$('#username').val(),
 				password:$('#password').val()
@@ -42,7 +41,6 @@ $(document).ready(function(){
 					data: datos,
 					method: 'POST',
 					success: function(res, textStatus, xhr){
-						console.log("hoooolaaaa")
 						if(res.creado){
 							$.ajax({
 								url:'/login/login',
@@ -59,7 +57,7 @@ $(document).ready(function(){
 					}
 				});
 			} else {
-				$('#error').html('O contrasinal non coincide.')
+				$('#error').html('O contrasinal non coincide.');
 			}
 		}
 	});

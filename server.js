@@ -52,6 +52,15 @@ app.get('/iniciarPartida',function(req,res){
 	});
 });
 
+app.get('/test',(req,res)=>{
+	if(req.isAuthenticated()){
+		console.log(req);
+	} else {
+		console.log('NOU');	
+	}
+	res.end();
+})
+
 server.listen(3000, ()=>console.log('Servidor comezado con express. Escoitando no porto 3000'));
 
 // mongoClient.connect(config.mongo.url, function(err, db) {
