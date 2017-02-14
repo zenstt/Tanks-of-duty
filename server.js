@@ -1,21 +1,32 @@
+//----------Módulos de JS----------//
 const http = require('http');
 const path = require('path')
 const express = require("express");
 const BodyParser = require("body-parser");
-const apiLogin=require("./modules/registro.js");
-const apiTanques=require("./modules/funTanques.js");
 const cookieParser=require("cookie-parser");
 const expressSession=require("express-session");
 const passport=require('passport');
-var config = require('./modules/conf.js');
 
+
+//----------Módulos propios----------//
+/*Endpoints de usuarios y tanques*/
+const apiLogin=require("./modules/endpoints/usuarios.js");
+const apiTanques=require("./modules/endpoints/tanques.js");
+
+/*Datos para las configuraciones */
+var config = require('./modules/config/conf.js');
+
+
+/*Creaccion y configuracion del servidor*/
 const app = express();
 const server = http.createServer(app);
 
 app.use(BodyParser.json()); //Recibir peticiones POST con datos en json
 app.use(BodyParser.urlencoded({extended:true})); //para formularios en post
-app.use(express.static(path.join(__dirname,'public')));
+app.use(express.static(path.join(__dirname,'public')));//dirección donde se encuentra la lógica de cliente
 
+
+/*Configuración del uso de cookies y passport*/
 app.use(cookieParser());
 app.use(expressSession({
     secret:'estonoesuncifrado',

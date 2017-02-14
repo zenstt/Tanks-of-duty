@@ -3,7 +3,7 @@ const elementos = require('./elementos');
 const tablero = require('./tablero');
 const mongoClient=require('mongodb').MongoClient;
 const assert=require('assert');
-const config=require('./conf.js');
+const config=require('../config/conf.js');
 // const Jugador = require('./jugador');
 const url=config.mongo.url;
 
