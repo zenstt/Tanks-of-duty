@@ -1,0 +1,17 @@
+#game,#board{
+	display: flex;
+	width: 500px;
+}
+#board,.casilla{
+	border: 1px solid black;
+}
+#game{
+	align-items: center;
+	height: 70px;
+	justify-content: space-around;
+}
+#board{
+	height: 500px;
+	flex-wrap: wrap;
+	justify-content: space-between;
+}
