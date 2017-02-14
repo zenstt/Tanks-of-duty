@@ -13,6 +13,7 @@ html,body{
 	height: 70%;
 }
 #misTanques,#misPartidas{
+	overflow: auto;
 	height: 100%;
 	border:1px solid black;
 }

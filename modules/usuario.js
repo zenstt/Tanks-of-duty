@@ -267,7 +267,7 @@ class usuario {
      * @return {Function}    cb
      */
     consultarTanques(id, cb) {
-        const buscar = 'SELECT (ID,nombre,hp,ammo,urlia) FROM usuarios.tanque where usuario = "' + id + '"';
+        const buscar = 'SELECT ID,nombre,hp,ammo,urlia FROM usuarios.tanque where usuario = "' + id + '"';
         let cliente = mysql.createConnection(this._mysqlconnection);
         cliente.connect((err) => {
             if (err) {
