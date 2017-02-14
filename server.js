@@ -38,6 +38,7 @@ app.use(passport.session());
 
 
 
+
 function ensureAuth(req,res,next){
 	if(req.isAuthenticated()){
 		return next();

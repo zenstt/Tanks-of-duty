@@ -1,104 +1,91 @@
 'use strict';
 const elementos = require('./elementos');
 const tablero = require('./tablero');
-const mongoClient=require('mongodb').MongoClient;
-const assert=require('assert');
-const config=require('../config/conf.js');
-// const Jugador = require('./jugador');
-const url=config.mongo.url;
+const mongoClient = require('mongodb').MongoClient;
+const assert = require('assert');
+const urlMongo = require('../config/conf.js').mongo.url;
 
 class Partida {
 
-	constructor(nombre, columnas, filas,tick) {
-
-
+	constructor(id, nombre, columnas, filas) {
+		this._id = id;
+		this._nombre = nombre;
 		this._tablero = new tablero(nombre, columnas, filas);
 		this._jugadores = new Map();
-		this._tick = tick || 3000;
 	}
 
-	set tick(value){
-		this._tick=value;
+	insertarTanque(tanque) {
+		this._tablero.insertarTanque(tanque);
 	}
 
-	addTanque(nombre) {
-		let taque = new elementos.tanque(nombre);
-		this._tablero.insertar(tanque);
+	movTanque(idTanque) {
+		this._tablero.mover(idTanque, "tanque");
 	}
 
-	movTanque(nombre) {
-		this._tablero.mover(nombre);
+	shootTanque(idTanque) {
+		this._tablero.disparar(idTanque);
 	}
 
-	shootTanque(nombre) {
-		this._tablero.disparar(nombre);
-	}
-
-	girarTanque(nombre, direccion) {
-		this._tablero.mover(nombre, direccion);
+	girarTanque(idTanque, direccion) {
+		this._tablero.girar(idTanque, direccion);
 	}
 
 	empezarPartida() {
-		let tick = 0;
-		let interval = setInterval(function() {
-			// this._tablero.moverBalas();
-			console.log(tick);
-			tick++;
-
-		}, this._tick);
-
+		let interval = setInterval(this._tablero.moverBalas, 500);
 	}
 
-	addJugador(jugador){
-		this._jugadores.set(jugador.id,jugador);
+	addJugador(jugador) {
+		this._jugadores.set(jugador.id, jugador);
 	}
 
-	guardarPartida(){
-		
+	guardarPartida() {
+
 		// console.log(Array.from(this._jugadores));
 
-		var part={
-			nombre:this._tablero.nombre,
-			tablero:this._tablero,
-			jugadores:Array.from(this._jugadores)
-			// jugadores:this._jugadores
+		var part = {
+			nombre: this._tablero.nombre,
+			tablero: this._tablero,
+			jugadores: Array.from(this._jugadores)
+				// jugadores:this._jugadores
 		};
 
 		// var nom=cargarPartidas();
 		// var json=JSON.parse({partida:part});
 		// console.log(part);
-		mongoClient.connect(url,function(err,db){
-			assert.equal(null,err);
+		mongoClient.connect(url, function(err, db) {
+			assert.equal(null, err);
 			console.log('conexion exitosa');
 
-			var conex=db.collection('partida');
+			var conex = db.collection('partida');
 			// console.log(conex);
-			conex.insert(part,function(){
+			conex.insert(part, function() {
 				console.log('insertado');
 				db.close();
 			})
 		})
 	}
 
-	cargarPartidas(){
-		mongoClient.connect(url, function(err,db){
-			assert.equal(null,err);
+	cargarPartidas() {
+		mongoClient.connect(url, function(err, db) {
+			assert.equal(null, err);
 
-			var coleccion=db.collection('partida');
-			coleccion.find().toArray(function(err,data){
-				return(data);
+			var coleccion = db.collection('partida');
+			coleccion.find().toArray(function(err, data) {
+				return (data);
 				db.close();
 			});
 
 		})
 	}
 
-	comprobarPartida(nombrep,cb){
-		mongoClient.connect(url, function(err,db){
-			assert.equal(null,err);
+	comprobarPartida(nombrep, cb) {
+		mongoClient.connect(url, function(err, db) {
+			assert.equal(null, err);
 
-			var coleccion=db.collection('partida');
-			coleccion.find({nombre:nombrep}).toArray(function(err,data){
+			var coleccion = db.collection('partida');
+			coleccion.find({
+				nombre: nombrep
+			}).toArray(function(err, data) {
 				db.close();
 				cb(data.length);
 			});
@@ -107,4 +94,4 @@ class Partida {
 	}
 
 }
-module.exports=Partida;
+module.exports = Partida;
