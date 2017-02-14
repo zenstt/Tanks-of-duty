@@ -14,6 +14,10 @@ class Partida {
 		this._jugadores = new Map();
 	}
 
+	get tablero(){
+		return this._tablero;
+	}
+
 	insertarTanque(tanque) {
 		this._tablero.insertarTanque(tanque);
 	}
