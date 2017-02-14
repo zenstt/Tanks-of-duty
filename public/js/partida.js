@@ -1,7 +1,15 @@
 "use strict";
 $(document).ready(() => {
 	$("#create").click(() => {
-		createBoard($("#row").val());
+		$.ajax({
+			url:'/partidas/crearPartida',
+			data: {nombre:'juanete',col:$("#row").val(),fila:$("#row").val()},
+			method: 'POST',
+			success: function(res, textStatus, xhr){
+				console.log(res)
+				createBoard($("#row").val());
+			}
+		})
 		inserTank(3,4)
 	});
 });

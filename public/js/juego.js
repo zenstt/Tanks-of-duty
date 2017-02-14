@@ -68,4 +68,15 @@ $(document).ready(function() {
 			}
 		})
 	})
+	$('#crearPartida').click(function(){
+		$.ajax({
+			url:'/partidas/page',
+			data: null,
+			method: 'GET',
+			success: function(res, textStatus, xhr){
+				window.location.replace(res.url);
+				// console.log(res)
+			}
+		})
+	})
 });;

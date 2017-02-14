@@ -54,10 +54,14 @@ function ensureAuth(req,res,next){
 //========================================================
 app.use('/login',apiLogin);
 app.use('/tanques',apiTanques);
-app.use('/partida',apiPartidas);
+app.use('/partidas',apiPartidas);
 
 app.get('/juego',ensureAuth,(req,res)=>{
 	res.sendFile('public/juego.html',{root: __dirname });
+});
+
+app.get('/partida',ensureAuth,(req,res)=>{
+	res.sendFile('public/partida.html',{root: __dirname });
 });
 
 app.get('/iniciarPartida',function(req,res){
