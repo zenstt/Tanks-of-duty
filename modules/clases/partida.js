@@ -15,7 +15,7 @@ class Partida {
 	}
 
 	get tablero(){
-		return this._tablero;
+		return this._tablero.info;
 	}
 
 	insertarTanque(tanque) {
@@ -38,19 +38,18 @@ class Partida {
 		let interval = setInterval(this._tablero.moverBalas, 500);
 	}
 
-	addJugador(jugador) {
-		this._jugadores.set(jugador.id, jugador);
+	addJugador(idJugador,idTanque) {
+		this._jugadores.set(idJugador,idTanque);
 	}
 
+	////seguir con esto
 	guardarPartida() {
-
-		// console.log(Array.from(this._jugadores));
-
-		var part = {
-			nombre: this._tablero.nombre,
-			tablero: this._tablero,
+		var partida = {
+			id: this._id,
+			nombre:this._nombre,
+			dimensiones:this._tablero.dimensiones,
+			elemntos: this._tablero.info,
 			jugadores: Array.from(this._jugadores)
-				// jugadores:this._jugadores
 		};
 
 		// var nom=cargarPartidas();
@@ -62,7 +61,7 @@ class Partida {
 
 			var conex = db.collection('partida');
 			// console.log(conex);
-			conex.insert(part, function() {
+			conex.insert(partida, function() {
 				console.log('insertado');
 				db.close();
 			})

@@ -21,7 +21,7 @@ class Tablero{
 	get nombre(){
 		return this._nombre;
 	}
-	get dimension(){
+	get dimensiones(){
 		return {filas:this._filas+1,columnas:this._columnas+1};
 	}
 	get tablero(){
