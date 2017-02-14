@@ -3,8 +3,8 @@ var express = require('express');
 var mysql = require('mysql');
 const cookieParser = require("cookie-parser");
 const expressSession = require("express-session");
-var usuario = require('./usuario.js')
-const elementos = require('./elementos.js');
+var usuario = require('../clases/usuario.js')
+const elementos = require('../clases/elementos.js');
 
 const router = express.Router();
 

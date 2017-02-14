@@ -24,3 +24,6 @@ html,body{
 	flex-wrap: wrap;
 	justify-content: space-between;
 }
+.casilla{
+	/*background-size: 100% 100%;*/
+}

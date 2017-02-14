@@ -297,7 +297,8 @@ class usuario {
      * @return {Function}    cb
      */
     crearTanque(id, tanque, cb) {
-        const crear = "INSERT INTO usuarios.tanque (nombre, hp, ammo, urlia, usuario) VALUES ('" + tanque.nombre + "', '" + tanque.vida + "', '" + tanque.muni + "', '" + tanque.IA + "', '" + id + "');";
+        
+        let crear = "INSERT INTO usuarios.tanque (nombre, hp, ammo, urlia, usuario) VALUES ('" + tanque.nombre + "', '" + tanque.vida + "', '" + tanque.muni + "', '" + tanque.IA + "', '" + id + "');";
         let cliente = mysql.createConnection(this._mysqlconnection);
         cliente.connect((err) => {
             if (err) {

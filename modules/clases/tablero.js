@@ -72,7 +72,7 @@ class Tablero{
 			case 3: return "Error: Fuera de rango";
 			case 2: return "Error: Espacio no disponible";
 			case 1: this.insertarTanque(tanque);break;
-			case 0: this._tanques.set(tanque.nombre,tanque);return true;
+			case 0: this._tanques.set(tanque.id,tanque);return true;
 		}
 	}
 
@@ -98,22 +98,22 @@ class Tablero{
 			default: console.log("Eso no es una orientacion"); break;
 		}
 	}
-	mover(id){
-		let objeto= typeof(id)=="number" ? this._balas.get(id):this._tanques.get(id);
+	mover(id,type){
+		let objeto= type=="bala" ? this._balas.get(id):this._tanques.get(id);
 		let delante = this.casillaDelante(objeto);
 		let posicion = objeto.pos;
 		if (delante){
 			if(delante.con === null){
 				this.insertar(objeto,delante.pos.x,delante.pos.y);
 				this._tablero[posicion.x][posicion.y].con = null;
-				if (objeto.tipo=="bala"){
+				if (type=="bala"){
 					this._balas.set(id,objeto);
 				}
-				if (objeto.tipo =="tanque"){
+				if (type =="tanque"){
 					this._tanques.set(id,objeto);
 				}
 			} else {
-				if (objeto.tipo == "tanque"){
+				if (type == "tanque"){
 					if (delante.con.tipo == "tanque"){
 						delante.con.vida-=2;
 						objeto.vida--;
@@ -126,7 +126,7 @@ class Tablero{
 						this.insertar(objeto,delante.pos.x,delante.pos.y);
 						this._tablero[posicion.x][posicion.y].con = null;
 					}
-				} else if (objeto.tipo == "bala"){
+				} else if (type == "bala"){
 					if (delante.con.tipo == "tanque"){
 						delante.con.vida--;
 						this._balas.delete(id);
@@ -144,7 +144,7 @@ class Tablero{
 				}
 			}
 		} else {
-			if (objeto.tipo =="bala"){
+			if (type =="bala"){
 				this._balas.delete(id);
 				this._tablero[posicion.x][posicion.y].con = null;
 			}
@@ -193,7 +193,7 @@ class Tablero{
 
 	moverBalas(){
 		for (let bala of this._balas.values()) {
-			this.mover(bala.id);
+			this.mover(bala.id,'bala');
 		}	
 	}
 

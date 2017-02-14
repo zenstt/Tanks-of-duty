@@ -12,6 +12,7 @@ const passport=require('passport');
 /*Endpoints de usuarios y tanques*/
 const apiLogin=require("./modules/endpoints/usuarios.js");
 const apiTanques=require("./modules/endpoints/tanques.js");
+const apiPartidas=require("./modules/endpoints/partidas.js");
 
 /*Datos para las configuraciones */
 var config = require('./modules/config/conf.js');
@@ -53,6 +54,7 @@ function ensureAuth(req,res,next){
 //========================================================
 app.use('/login',apiLogin);
 app.use('/tanques',apiTanques);
+app.use('/partida',apiPartidas);
 
 app.get('/juego',ensureAuth,(req,res)=>{
 	res.sendFile('public/juego.html',{root: __dirname });
