@@ -1,9 +1,18 @@
-#game,#board{
+html,body{
+	height:100%;
+}
+#cont{
+	display:flex;
+	justify-content:center;
+	flex-direction: column;
+	align-items: center;
+}
+#game,#board{	
 	display: flex;
 	width: 500px;
 }
 #board,.casilla{
-	border: 1px solid black;
+	border: 1px solid gray;
 }
 #game{
 	align-items: center;
