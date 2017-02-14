@@ -13,7 +13,7 @@ class Tanque {
 	 * x representa la posición segun las columnas
 	 * y representa la posición segun las filas
 	 */
-	constructor(nombre, o, vida, muni) {
+	constructor(nombre, vida, muni, o) {
 		this._nombre = nombre;
 		this._o = o || direcciones[Math.floor(Math.random() * 4)];
 		this._vida = vida || 10;
