@@ -10,9 +10,9 @@ const passport=require('passport');
 
 //----------Módulos propios----------//
 /*Endpoints de usuarios y tanques*/
-const apiLogin=require("./modules/endpoints/usuarios.js");
-const apiTanques=require("./modules/endpoints/tanques.js");
-const apiPartidas=require("./modules/endpoints/partidas.js");
+const apiLogin=require("./modules/endpoints/endPoint_usuarios.js");
+const apiTanques=require("./modules/endpoints/endPoint_tanques.js");
+const apiPartidas=require("./modules/endpoints/endPoint_partidas.js");
 
 /*Datos para las configuraciones */
 var config = require('./modules/config/conf.js');

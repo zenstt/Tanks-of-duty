@@ -13,7 +13,7 @@ var config={
 		secret:"rXDYpZTsHuy5FcL_4dfahj3I"
 	},
 	mongo:{
-		url:'mongodb://52.57.173.168:27017/db'
+		url:'mongodb://ProyectUser:ProyectUser@ds157819.mlab.com:57819/proyecto'
 	}
 
 }
