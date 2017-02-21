@@ -1,21 +1,35 @@
 "use strict";
+// var socket = io.connect(window.location.hostname);
+var socket=io.connect('192.168.0.46:3000');
+// var socket=io.connect('localhost:3000',{'forceNew':true});
+
+socket.emit('entrarPartida',localStorage.getItem("idPartida"));
+socket.on('test',function(data){
+	console.log(data);
+});
 $(document).ready(() => {
 	$.ajax({
-		url:'/partidas/crearPartida',
-		data: {nombre:'juanete',col:$("#row").val(),fila:$("#row").val()},
+		url:'/partidas/obtenerPartida',
+		data: {id:localStorage.getItem("idPartida")},
 		method: 'POST',
 		success: function(res, textStatus, xhr){
-			console.log(res)
-			createBoard($("#row").val());
+			createBoard(res.partida.dimensiones.columnas);
+			insertThings(res.partida);
 		}
 	})
-	inserTank(3,4)
+	// inserTank(3,4)
 });
-function inserTank(row,col){
-	$('#'+row+'-'+col).css('background-image','url(./img/tank_up.png)');
-	$('#'+row+'-'+col).css('background-size','contain');
+function insertObject(row,col,tipo){
+	if (tipo=='roca'){
+		$('#'+row+'-'+col).css('background-image','url(./img/'+tipo+'.png)');
+	} else {
+		$('#'+row+'-'+col).css('background-image','url(./img/'+tipo+'_up.png)');
+		$('#'+row+'-'+col).css('background-size','contain');
+	}
+	
 	$('#'+row+'-'+col).css('background-repeat','no-repeat');
 }
+
 function createBoard(row) {
 	let column=row;
 	let tileSet = "",
@@ -33,4 +47,9 @@ function createBoard(row) {
 	$("#board").html(tileSet);
 	$(".casilla").css("heigth", 500 / row - 2);
 	$(".casilla").css("width", 500 / column - 2);
+}
+function insertThings(board){
+	for (let object of board.datos){
+		insertObject(object.posX,object.posY,object.tipo);
+	}
 }

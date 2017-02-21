@@ -55,10 +55,7 @@ class Partida {
 	 * y el nombre en "nombre"
 	 */
 	get tablero() {
-		return {
-			tablero: this._tablero.info,
-			nombre: this._nombre
-		};
+		return this._tablero.info;
 	}
 
 	/**

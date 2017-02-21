@@ -80,8 +80,7 @@ $(document).ready(function() {
 				},
 				method: 'POST',
 				success: function(res, textStatus, xhr){
-					localStorage.setItem("lastname", "Smith");
-					console.log(res)
+					localStorage.setItem("idPartida", res.partida);
 					window.location.replace(res.url);
 				}
 			})
