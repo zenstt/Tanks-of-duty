@@ -72,177 +72,216 @@ class Tablero {
 		};
 	}
 
-	get tanques() {
-			return this._tanques;
-		}
-		// ------ Funciones ------ //
-		// Funcion que inserta un objeto en una casilla en la fila y columna indicados
+	// ------ Funciones ------ //
+	
+	/**
+	 * Inserta un objeto en una casilla indicada por una columna y una fila
+	 * @param  {Object} objeto un objeto de la clase elementos 
+	 * @param  {number} columna 
+	 * @param  {number} fila    
+	 * @return {Object} err es un {number} indicando el tipo de error, y log lo explica {string}
+	 * un 0 significa que no hay error       
+	 */
 	insertar(objeto, columna, fila) {
 		if (fila > this._filas || fila < 0 || columna > this._columnas || columna < 0) {
-			console.log("Error: Fuera de rango");
-			return 3;
+			return {err:3,log:"Error: Fuera de rango"};
 		} else {
 			if (this.info.length >= (this._filas + 1) * (this._columnas + 1)) {
-				console.log("No hay mas espacio disponible");
-				return 2;
+				return {err:2,log:"Error: No hay mas espacio disponible"};
 			} else {
 				if (this._tablero[columna][fila].con !== null) {
-					return 1;
+					return {err:1,log:"Error: Ya hay algo en esa casilla"};
 				} else {
 					this._tablero[columna][fila].con = objeto;
-					return 0;
+					return {err:0,log:"Yay!"};
 				}
 			}
 		}
 	}
 
+	/**
+	 * Inserta un tanque en el tablero usando la función this.insertar
+	 * y comprobamos los posibles errores. Además metemos este objeto en su mapa
+	 * correspondiente
+	 * @param  {Object} tanque un objeto elementos.tanque
+	 * @return {Object}        basado en el error-
+	 * err: {boolean} si hay cualquier clase de error que no permita que el tanque se inserte,
+	 * 		devolverá true, si no hay error, false
+	 * log: {string} devuelve el dato del error
+	 */
 	insertarTanque(tanque) {
 		let ranTanqueX = Math.floor(Math.random() * (this._columnas + 1));
 		let ranTanqueY = Math.floor(Math.random() * (this._filas + 1));
-		switch (this.insertar(tanque, ranTanqueX, ranTanqueY)) {
+		let insertar=this.insertar(tanque, ranTanqueX, ranTanqueY);
+		switch (insertar.err) {
 			case 3:
-				return "Error: Fuera de rango";
 			case 2:
-				return "Error: Espacio no disponible";
+				return {err:true,log:insertar.log};
 			case 1:
 				this.insertarTanque(tanque);
 				break;
 			case 0:
 				this._tanques.set(tanque.id, tanque);
-				return true;
+				return {err:false,log:insertar.log};
 		}
 	}
 
+	/**
+	 * Inserta una roca en el tablero usando la función this.insertar
+	 * y comprobamos los posibles errores
+	 * 
+	 * @return {Object}        basado en el error-
+	 * err: {boolean} si hay cualquier clase de error que no permita que la roca se inserte,
+	 * 		devolverá true, si no hay error, false
+	 * log: {string} devuelve el dato del error
+	 */
 	insertarRoca() {
 		let ranRocaX = Math.floor(Math.random() * (this._columnas + 1));
 		let ranRocaY = Math.floor(Math.random() * (this._filas + 1));
-		switch (this.insertar(new elementos.roca(), ranRocaX, ranRocaY)) {
+		let insertar=this.insertar(new elementos.roca(), ranRocaX, ranRocaY);
+		switch (insertar.err) {
 			case 3:
-				return "Error: Fuera de rango";
 			case 2:
-				return "Error: Espacio no disponible";
+				return {err:true,log:insertar.log};
 			case 1:
 				this.insertarRoca();
 				break;
 			case 0:
-				return true;
+				return {err:false,log:insertar.log};
 		}
 	}
 
-	// Funcion que devuelve el contenido de la casilla de delante del objeto
-	casillaDelante(objeto) {
-		let pos = objeto.pos;
+	/**
+	 * Dandole una posición con una orientación ([norte, sur, este u oeste]), segun ésta,
+	 * mira si hay una casilla delante suya, si la hay, devuelve sus datos
+	 * @param  {Object} pos tiene las posiciones x {number} e y {number}
+	 *                      junto a la orientación {string}
+	 * @return {Object} 	contiene err, que es true si hay algun error, e 
+	 *                      info, que contiene los datos de la casilla  
+	 */
+	casillaDelante(pos) {
 		switch (pos.o) {
 			case "norte":
-				if (pos.y > 0) {
-					return this._tablero[pos.x][pos.y - 1];
-				} else {
-					return false;
-				}
+				return pos.y>0 ? {err:false,info:this._tablero[pos.x][pos.y - 1]}:{err:true,info:""};
 				break;
 			case "sur":
-				if (pos.y < this._filas) {
-					return this._tablero[pos.x][pos.y + 1];
-				} else {
-					return false;
-				}
+				return pos.y<this._filas ? {err:false,info:this._tablero[pos.x][pos.y + 1]}:{err:true,info:""};
 				break;
 			case "este":
-				if (pos.x < this._columnas) {
-					return this._tablero[pos.x + 1][pos.y];
-				} else {
-					return false;
-				}
+				return pos.y<this._columnas ? {err:false,info:this._tablero[pos.x + 1][pos.y]}:{err:true,info:""};
 				break;
 			case "oeste":
-				if (pos.x > 0) {
-					return this._tablero[pos.x - 1][pos.y];
-				} else {
-					return false;
-				}
-				break;
-			default:
-				console.log("Eso no es una orientacion");
+				return pos.y<0 ? {err:false,info:this._tablero[pos.x - 1][pos.y]}:{err:true,info:""};
 				break;
 		}
 	}
+
+	/**
+	 * Se mueve un objeto a la casilla que tiene delante
+	 * @param  {number} id   id de la bala o tanque, ya que son los unicos con orientacion
+	 * @param  {string} type tipo del objeto, es necesario para conseguir el objeto de su mapa correspondiente
+	 * @return {nosé}      
+	 */
 	mover(id, type) {
 		let objeto = type == "bala" ? this._balas.get(id) : this._tanques.get(id);
-		let delante = this.casillaDelante(objeto);
 		let posicion = objeto.pos;
-		if (delante) {
-			if (delante.con === null) {
-				this.insertar(objeto, delante.pos.x, delante.pos.y);
+		let delante = this.casillaDelante(posicion);
+		let resultado={
+			err:false,
+			suceso:""
+		}
+		if (!delante.err) {
+			let info=delante.info;
+			//Si no hay nada delante, se mueve
+			if (delante.info.con === null) {
+				this.insertar(objeto, info.pos.x, info.pos.y);
 				this._tablero[posicion.x][posicion.y].con = null;
 				if (type == "bala") {
 					this._balas.set(id, objeto);
-				}
-				if (type == "tanque") {
+				} else {
 					this._tanques.set(id, objeto);
 				}
 			} else {
+				//Si se trata de un tanque, y hay algo delante, éste perderá vida
 				if (type == "tanque") {
-					if (delante.con.tipo == "tanque") {
-						delante.con.vida -= 2;
-						objeto.vida--;
-					} else if (delante.con.tipo == "roca") {
-						delante.con.vida -= 2;
-						objeto.vida--;
-					} else if (delante.con.tipo == "bala") {
-						objeto.vida--;
-						this._balas.delete(delante.con.id);
-						this.insertar(objeto, delante.pos.x, delante.pos.y);
-						this._tablero[posicion.x][posicion.y].con = null;
+					objeto.vida--;
+					//Hará que las rocas o los tanques pierdan vida
+					if (info.con.tipo == "tanque" || info.con.tipo == "roca") {
+						resultado.err=true;
+						info.con.vida -= 2;
+						resultado.suceso="Chocó con un tanque o roca";
+					} else {
+						//Las balas, en cambio, deben desaparecer ante este suceso
+						//el tanque se moverá igualmente, asi que el err se queda en false
+						this._balas.delete(info.con.id);
+						this.insertar(objeto, info.pos.x, info.pos.y);
+						vaciarCasilla(posicion.x,posicion.y);
 					}
+					//en cambio, las balas, si chocan con algo desaparecerán
 				} else if (type == "bala") {
-					if (delante.con.tipo == "tanque") {
-						delante.con.vida--;
-						this._balas.delete(id);
-						this._tablero[posicion.x][posicion.y].con = null;
-					} else if (delante.con.tipo == "roca") {
-						delante.con.vida--;
-						this._balas.delete(id);
-						this._tablero[posicion.x][posicion.y].con = null;
-					} else if (delante.con.tipo == "bala") {
-						this._balas.delete(id);
-						this._balas.delete(delante.con.id);
-						this._tablero[delante.pos.x][delante.pos.y].con = null;
-						this._tablero[posicion.x][posicion.y].con = null;
+					resultado.err=true;
+					this._balas.delete(id);
+					vaciarCasilla(posicion.x,posicion.y)
+					//Hará que las rocas o los tanques pierdan vida
+					if (info.con.tipo == "tanque" || info.con.tipo == "roca") {
+						info.con.vida--;
+						resultado.suceso="Chocó con un tanque o roca";
+					//las balas, al chocar, se borrarán entre ellas
+					} else if (info.con.tipo == "bala") {
+						this._balas.delete(info.con.id);
+						vaciarCasilla(info.pos.x,info.pos.y);
+						resultado.suceso="Chocó con otra bala";
 					}
 				}
 			}
 		} else {
+			//si llegase al límite de la pantalla, un tanque no haría nada,
+			//pero una bala desaparece
+			resultado.suceso="Llegó al límite del mapa";
 			if (type == "bala") {
 				this._balas.delete(id);
-				this._tablero[posicion.x][posicion.y].con = null;
+				vaciarCasilla(posicion.x,posicion.y);
 			}
 		}
-		return objeto;
+		return resultado;
 	}
 
-	girar(id, direccion) {
-		let objeto = this._tanques.get(id);
+	/**
+	 * Cambia la orientación del tanque
+	 * @param  {number} id Tanque 
+	 * @param  {string} direccion debe ser "derecha" o "izquierda"
+	 * @return {string}           la nueva orientación del tanque
+	 */
+	girar(idTanque, direccion) {
+		let objeto = this._tanques.get(idTanque);
 		let orientaciones = ["norte", "este", "sur", "oeste"];
 		let index = orientaciones.indexOf(objeto.pos.o);
-		switch (direccion) {
-			case "derecha":
-				objeto.o = index == orientaciones.length - 1 ? orientaciones[0] : orientaciones[index + 1];
-				break;
-			case "izquierda":
-				objeto.o = index === 0 ? orientaciones[orientaciones.length - 1] : orientaciones[index - 1];
-				break;
-			default:
-				console.log("Error en la direccion de giro");
+		if(direccion=="derecha"){
+			objeto.o = index == orientaciones.length - 1 ? orientaciones[0] : orientaciones[index + 1];
+		}else{
+			objeto.o = index === 0 ? orientaciones[orientaciones.length - 1] : orientaciones[index - 1];
 		}
-		return objeto;
+		return objeto.o;
 	}
-	disparar(id) {
-		let objeto = this._tanques.get(id);
-		let delante = this.casillaDelante(objeto);
+
+
+
+
+	//--------------------------------------------Falta por actualizar------------------------------------//
+	/**
+	 * Crea una bala delante del tanque y se mete en el mapa
+	 * solo si tiene munición
+	 * @param  {number} idTanque 
+	 * @return {boolean}    
+	 */
+	disparar(idTanque) {
+		let objeto = this._tanques.get(idTanque);
+		let delante = this.casillaDelante(objeto.pos);
 		let posicion = objeto.pos;
 		if (objeto.muni > 0) {
 			objeto.muni--;
-			if (delante) {
+			if (!delante.err) {
+				let info=delante.info;
 				if (delante.con === null) {
 					let bala = new elementos.bala(contarBala, posicion.o);
 					this.insertar(bala, delante.pos.x, delante.pos.y);
@@ -268,6 +307,10 @@ class Tablero {
 		for (let bala of this._balas.values()) {
 			this.mover(bala.id, 'bala');
 		}
+	}
+
+	vaciarCasilla(posX,posY){
+		this._tablero[posX][posY].con = null;
 	}
 
 	limpiarTablero() {
