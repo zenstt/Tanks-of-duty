@@ -18,7 +18,7 @@ router.use(expressSession({
 
 var num = 0;
 
-
+var partidas = [];
 
 function crearPartida(nombre,col,fila){
     let part = new partida(num,nombre,col,fila);
@@ -30,8 +30,8 @@ function crearPartida(nombre,col,fila){
 //                      ENDPOINTS
 //========================================================
 router.post('/crearPartida', (req, res) => {
-    let part = crearPartida(req.body.nombre, req.body.col, req.body.fila);
-    res.json(part);
+    let part = crearPartida(req.body.nombre, req.body.col);
+    res.json({partida:part,url:'/partida',login:true});
     res.end();
 });
 

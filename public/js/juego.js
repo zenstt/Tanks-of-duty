@@ -59,24 +59,32 @@ function consultar(){
 $(document).ready(function() {
 	consultar()
 	$('#crearTanque').click(function(){
-		$.ajax({
-			url:'/tanques/crear',
-			data: {nombreTanque:$('#tankName').val()},
-			method: 'POST',
-			success: function(res, textStatus, xhr){
-				consultar();
-			}
-		})
+		if ($('#tankName').val()){
+			$.ajax({
+				url:'/tanques/crear',
+				data: {nombreTanque:$('#tankName').val()},
+				method: 'POST',
+				success: function(res, textStatus, xhr){
+					consultar();
+				}
+			})
+		}
 	})
 	$('#crearPartida').click(function(){
-		$.ajax({
-			url:'/partidas/page',
-			data: null,
-			method: 'GET',
-			success: function(res, textStatus, xhr){
-				window.location.replace(res.url);
-				// console.log(res)
-			}
-		})
+		if ($('#nombrePartida').val() && $('#casillas').val()){
+			$.ajax({
+				url:'/partidas/crearPartida',
+				data: {
+					nombrePartida:$('#nombrePartida').val(),
+					casillasPartida:$('#casillas').val()
+				},
+				method: 'POST',
+				success: function(res, textStatus, xhr){
+					localStorage.setItem("lastname", "Smith");
+					console.log(res)
+					window.location.replace(res.url);
+				}
+			})
+		}
 	})
 });;

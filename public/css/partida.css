@@ -14,11 +14,11 @@ html,body{
 #board,.casilla{
 	border: 1px solid gray;
 }
-#game{
+/*#game{
 	align-items: center;
 	height: 70px;
 	justify-content: space-around;
-}
+}*/
 #board{
 	height: 500px;
 	flex-wrap: wrap;
