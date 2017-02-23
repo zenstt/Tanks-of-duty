@@ -299,6 +299,9 @@ class Tablero {
 	 * Mueve todas las balas del tablero
 	 */
 	moverBalas() {
+		console.log(self)
+		console.log(this._balas)
+		console.log(typeof(this._balas))
 		if(this._balas.size){
 			for (let bala of this._balas.values()) {
 				this.mover(bala.id, 'bala');
@@ -332,6 +335,12 @@ class Tablero {
 			}
 		}
 		return tanks;
+	}
+	get test(){
+		return this._tanques;
+	}
+	get test2(){
+		return this._balas;
 	}
 
 }

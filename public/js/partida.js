@@ -53,12 +53,12 @@ function action(act,direction){
 
 function insertObject(object){
 	// console.log(object)
-	let row = object.pos.y
-	let col = object.pos.x
+	let row = object.y
+	let col = object.x
 	if (object.tipo=='roca'){
 		$('#'+row+'-'+col).css('background-image','url(./img/'+object.tipo+'.png)');
 	} else {
-		$('#'+row+'-'+col).css('background-image','url(./img/'+object.tipo+'_'+object.pos.o+'.png)');
+		$('#'+row+'-'+col).css('background-image','url(./img/'+object.tipo+'_'+object.o+'.png)');
 		$('#'+row+'-'+col).css('background-size','contain');
 	}
 	$('#'+row+'-'+col).css('background-repeat','no-repeat');

@@ -106,7 +106,10 @@ class Partida {
 	 * genera un timer que será el que mueva las balas a cierta velocidad
 	 */
 	empezarPartida() {
-		let interval = setInterval(this._tablero.moverBalas, 500);
+		var self = this;
+		let interval = setInterval(function(){
+			self._tablero.moverBalas
+		}, 500);
 	}
 
 	/**

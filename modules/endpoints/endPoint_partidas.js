@@ -7,6 +7,7 @@ const expressSession = require("express-session");
 const config = require('../config/conf.js');
 const partida = require('../clases/partida.js');
 const usuario = require('../clases/usuario.js');
+const elementos = require('../clases/elementos.js');
 const app = express();
 
 const router = express.Router();
@@ -34,8 +35,9 @@ function crearPartida(nombre,medida,idJugador,idTanque,cb){
         num++;
         let part = new partida(num,nombre,medida);
         part.insertarRocas(Math.floor((medida*medida)*0.07));
-        part.empezarPartida();
         partidas[num]={partida:part,socketJugadores:[]};
+        part.empezarPartida();
+
         meterJugador(idJugador,idTanque,num,(err)=>{
             if (err){
                 cb({error:false,num:num});
