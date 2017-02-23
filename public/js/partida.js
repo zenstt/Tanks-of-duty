@@ -13,18 +13,18 @@ $(document).ready(() => {
 		data: {id:localStorage.getItem("idPartida")},
 		method: 'POST',
 		success: function(res, textStatus, xhr){
-			console.log(res)
+			// console.log(res)
 			createBoard(res.partida.part.dimensiones.columnas);
 			insertThings(res.partida.part);
 		}
 	})
 	$(window).keydown(function(e){
-		console.log(e.key)
+		console.log(e.keyCode)
 		switch (e.keyCode){
-			case 32: action('shoot');
-			case 37: action('girar','izquierda');
-			case 38: action('mover');
-			case 39: action('girar','derecha');
+			case 32: action('shoot');break;
+			case 37: action('girar','izquierda');break;
+			case 38: action('mover');break;
+			case 39: action('girar','derecha');break;
 		}
 	})
 });
@@ -52,7 +52,7 @@ function action(act,direction){
 }
 
 function insertObject(object){
-	console.log(object)
+	// console.log(object)
 	let row = object.pos.y
 	let col = object.pos.x
 	if (object.tipo=='roca'){

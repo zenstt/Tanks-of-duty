@@ -182,6 +182,7 @@ class Tablero {
 		let objeto = type == "bala" ? this._balas.get(id) : this._tanques.get(id);
 		let posicion = objeto.pos;
 		let delante = this.casillaDelante(posicion);
+		console.log(delante)
 		let resultado={
 			err:false,
 			suceso:""

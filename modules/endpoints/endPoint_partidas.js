@@ -34,6 +34,7 @@ function crearPartida(nombre,medida,idJugador,idTanque,cb){
         num++;
         let part = new partida(num,nombre,medida);
         part.insertarRocas(Math.floor((medida*medida)*0.07));
+        part.empezarPartida();
         partidas[num]={partida:part,socketJugadores:[]};
         meterJugador(idJugador,idTanque,num,(err)=>{
             if (err){
