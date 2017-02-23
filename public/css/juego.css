@@ -58,3 +58,15 @@ html,body{
 #casillas{
 	border-left: 0px;
 }
+.selected{
+	background-color: lightgray;
+}
+.nombre{
+	margin-top: 0;
+}
+.tank{
+	padding:10px 0 10px;
+}
+hr{
+	margin:0px;
+}

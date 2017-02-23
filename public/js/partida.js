@@ -13,8 +13,8 @@ $(document).ready(() => {
 		data: {id:localStorage.getItem("idPartida")},
 		method: 'POST',
 		success: function(res, textStatus, xhr){
-			createBoard(res.partida.dimensiones.columnas);
-			insertThings(res.partida);
+			createBoard(res.partida.part.dimensiones.columnas);
+			insertThings(res.partida.part);
 		}
 	})
 	// inserTank(3,4)
@@ -26,7 +26,6 @@ function insertObject(row,col,tipo){
 		$('#'+row+'-'+col).css('background-image','url(./img/'+tipo+'_up.png)');
 		$('#'+row+'-'+col).css('background-size','contain');
 	}
-	
 	$('#'+row+'-'+col).css('background-repeat','no-repeat');
 }
 

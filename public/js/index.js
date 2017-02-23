@@ -19,7 +19,7 @@ $(document).ready(function(){
 				success: function(res, textStatus, xhr){
 					if(res.login){
 						$('#error').html('Login correcto');
-						window.location.replace(res.url);
+						window.location.href = res.url;
 					}
 				}
 			});

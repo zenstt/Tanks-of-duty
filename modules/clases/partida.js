@@ -72,9 +72,10 @@ class Partida {
 	 * Mete el tanque en el tablero
 	 * @param  {Object} tanque un objeto tanque
 	 */
-	insertarTanque(tanque) {
-		this._tablero.insertarTanque(tanque);
-	}
+	// insertarTanque(nombre,id) {
+	// 	let tanque = new elementos.tanque(nombre,id);
+	// 	this._tablero.insertarTanque(tanque);
+	// }
 
 	/**
 	 * Mueve el tanque del usuario dado
@@ -113,8 +114,10 @@ class Partida {
 	 * @param {number} idJugador 
 	 * @param {number} idTanque  
 	 */
-	meterJugador(idJugador, idTanque) {
+	meterJugador(idJugador,nombreTanque, idTanque) {
 		this._jugadores.set(idJugador, idTanque);
+		let tanque = new elementos.tanque(nombreTanque,idTanque);
+		this._tablero.insertarTanque(tanque);
 	}
 }
 module.exports = Partida;
