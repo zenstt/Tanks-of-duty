@@ -6,7 +6,7 @@ const cookieParser = require("cookie-parser");
 const expressSession = require("express-session");
 const config = require('../config/conf.js');
 const partida = require('../clases/partida.js');
-const partida = require('../clases/usuario.js');
+const usuario = require('../clases/usuario.js');
 const app = express();
 
 const router = express.Router();
@@ -29,7 +29,7 @@ var num = 0;
 
 var partidas = new Map();
 
-function crearPartida(nombre,medida,idJugador,idTanque){
+function crearPartida(nombre,medida,idJugador,idTanque,cb){
     if (medida>=3 && medida<=15){
         num++;
         let part = new partida(num,nombre,medida);
@@ -37,13 +37,13 @@ function crearPartida(nombre,medida,idJugador,idTanque){
         partidas[num]={partida:part,socketJugadores:[]};
         meterJugador(idJugador,idTanque,num,(err)=>{
             if (err){
-                return {error:false,num:num};
+                cb({error:false,num:num});
             } else {
-                return {error:true,message:"No se encuentra el tanque del jugador"};
+                cb({error:true,message:"No se encuentra el tanque del jugador"});
             }
         });
     } else {
-        return {error:true,message:"Las partidas tienen que tener un minimo de 3 y maximo de 15"};
+        cb({error:true,message:"Las partidas tienen que tener un minimo de 3 y maximo de 15"});
     }
 }
 function obtenerPartida(id){
@@ -54,29 +54,49 @@ function obtenerPartida(id){
     return a ? {error:false,part:a}:{error:true,message:"No se encuentra la partida"};
 }
 function meterJugador(idJugador,idTanque,idPartida,cb){
-    let user = new Usuario('nombreTanque',mysqlconnection);
+    let user = new usuario('nombreTanque',mysqlconnection);
     user.consultarInfoTanque(idJugador,idTanque,(err,code,info)=>{
         if (code){
-            console.log(err)
             cb(false);
         }else{
             partidas[idPartida].partida.meterJugador(idJugador,info.nombre,idTanque);
             cb(true);
         }
     });
-
 }
+function moverJugador(idJugador,idPartida,accion,direccion){
+    let part = partidas[idPartida];
+    if (part){
+        if (direccion){
+            part.partida.girarTanque(idJugador,direccion);
+        } else {
+            if(accion=="mover"){
+                part.partida.moverTanque(idJugador);
+            } else {
+                part.partida.dispararTanque(idJugador);
+            }
+        }
+        return part.partida.tablero;
+    } else {
 
+    }
+}
 //========================================================
 //                      ENDPOINTS
 //========================================================
 router.post('/crearPartida', (req, res) => {
-    let part = crearPartida(req.body.nombrePartida, req.body.casillasPartida,req.user,req.body.idTanque);
-    res.json({partida:part,url:'/partida'});
-    res.end();
+    crearPartida(req.body.nombrePartida, req.body.casillasPartida,req.user.ID,req.body.idTanque,(data)=>{
+        res.json({partida:data,url:'/partida'});
+        res.end();
+    });
 });
 router.post('/obtenerPartida', (req, res) => {
     let part = obtenerPartida(req.body.id);
+    res.json({partida:part});
+    res.end();
+});
+router.post('/move',(req,res)=>{
+    let part = moverJugador(req.user.ID,req.body.data.idPartida,req.body.data.accion,req.body.data.direccion);
     res.json({partida:part});
     res.end();
 });
@@ -92,7 +112,6 @@ function socket(io,client){
     console.log('Client connected');
     client.on('entrarPartida',function(data){
         partidas[data].socketJugadores[client.id]=client;
-        console.log(partidas[data].socketJugadores)
     })
     client.on('disconnect', function() {
         console.log('Client disconnected');

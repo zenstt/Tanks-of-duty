@@ -58,8 +58,7 @@ class Tablero {
 			for (let y = 0; y <= this._filas; y++) {
 				if (this._tablero[x][y].con !== null) {
 					elem.push({
-						posX: x,
-						posY: y,
+						pos: this._tablero[x][y].con.pos,
 						tipo: this._tablero[x][y].con.tipo
 					});
 				}

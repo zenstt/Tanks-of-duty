@@ -13,17 +13,52 @@ $(document).ready(() => {
 		data: {id:localStorage.getItem("idPartida")},
 		method: 'POST',
 		success: function(res, textStatus, xhr){
+			console.log(res)
 			createBoard(res.partida.part.dimensiones.columnas);
 			insertThings(res.partida.part);
 		}
 	})
-	// inserTank(3,4)
+	$(window).keydown(function(e){
+		console.log(e.key)
+		switch (e.keyCode){
+			case 32: action('shoot');
+			case 37: action('girar','izquierda');
+			case 38: action('mover');
+			case 39: action('girar','derecha');
+		}
+	})
 });
-function insertObject(row,col,tipo){
-	if (tipo=='roca'){
-		$('#'+row+'-'+col).css('background-image','url(./img/'+tipo+'.png)');
+
+function action(act,direction){
+	let data = {
+		idPartida:localStorage.getItem("idPartida"),
+		accion:act,
+		direccion:null
+	}
+	if(act=='girar'){
+		data.direccion=direction;
+	}
+	console.log(data)
+	$.ajax({
+		url:'/partidas/move',
+		data: {data:data},
+		method: 'POST',
+		success: function(res, textStatus, xhr){
+			console.log(res)
+			createBoard(res.partida.dimensiones.columnas);
+			insertThings(res.partida);
+		}
+	})
+}
+
+function insertObject(object){
+	console.log(object)
+	let row = object.pos.y
+	let col = object.pos.x
+	if (object.tipo=='roca'){
+		$('#'+row+'-'+col).css('background-image','url(./img/'+object.tipo+'.png)');
 	} else {
-		$('#'+row+'-'+col).css('background-image','url(./img/'+tipo+'_up.png)');
+		$('#'+row+'-'+col).css('background-image','url(./img/'+object.tipo+'_'+object.pos.o+'.png)');
 		$('#'+row+'-'+col).css('background-size','contain');
 	}
 	$('#'+row+'-'+col).css('background-repeat','no-repeat');
@@ -49,6 +84,6 @@ function createBoard(row) {
 }
 function insertThings(board){
 	for (let object of board.datos){
-		insertObject(object.posX,object.posY,object.tipo);
+		insertObject(object);
 	}
 }
