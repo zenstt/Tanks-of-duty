@@ -116,31 +116,5 @@ class Partida {
 	meterJugador(idJugador, idTanque) {
 		this._jugadores.set(idJugador, idTanque);
 	}
-
-	// ////seguir con esto
-	// guardarPartida() {
-	// 	var partida = {
-	// 		id: this._id,
-	// 		nombre:this._nombre,
-	// 		dimensiones:this._tablero.dimensiones,
-	// 		elemntos: this._tablero.info,
-	// 		jugadores: Array.from(this._jugadores)
-	// 	};
-
-	// 	// var nom=cargarPartidas();
-	// 	// var json=JSON.parse({partida:part});
-	// 	// console.log(part);
-	// 	mongoClient.connect(url, function(err, db) {
-	// 		assert.equal(null, err);
-	// 		console.log('conexion exitosa');
-
-	// 		var conex = db.collection('partidas');
-	// 		// console.log(conex);
-	// 		conex.insert(partida, function() {
-	// 			console.log('insertado');
-	// 			db.close();
-	// 		})
-	// 	})
-	// }
 }
 module.exports = Partida;

@@ -195,7 +195,7 @@ class Tablero {
 			//Si no hay nada delante, se mueve
 			if (delante.info.con === null) {
 				this.insertar(objeto, info.pos.x, info.pos.y);
-				this._tablero[posicion.x][posicion.y].con = null;
+				vaciarCasilla(posicion.x,posicion.y);
 				if (type == "bala") {
 					this._balas.set(id, objeto);
 				} else {
@@ -261,18 +261,14 @@ class Tablero {
 		}else{
 			objeto.o = index === 0 ? orientaciones[orientaciones.length - 1] : orientaciones[index - 1];
 		}
-		return objeto.o;
+		return objeto.pos.o;
 	}
 
-
-
-
-	//--------------------------------------------Falta por actualizar------------------------------------//
 	/**
 	 * Crea una bala delante del tanque y se mete en el mapa
 	 * solo si tiene munición
 	 * @param  {number} idTanque 
-	 * @return {boolean}    
+	 * @return {boolean} solo devolverá false si no hay municion o no se pudiese crear la bala por estar fuera de los limites la casilla de delante
 	 */
 	disparar(idTanque) {
 		let objeto = this._tanques.get(idTanque);
@@ -282,19 +278,17 @@ class Tablero {
 			objeto.muni--;
 			if (!delante.err) {
 				let info=delante.info;
-				if (delante.con === null) {
+				if (info.con === null) {
 					let bala = new elementos.bala(contarBala, posicion.o);
-					this.insertar(bala, delante.pos.x, delante.pos.y);
+					this.insertar(bala, info.pos.x, info.pos.y);
 					this._balas.set(contarBala, bala);
 					contarBala++;
 				} else {
-					if (delante.con.tipo == "tanque") {
-						delante.con.vida--;
-					}
-					if (delante.con.tipo == "bala") {
-						this._balas.delete(delante.con.id);
-						this._tablero[delante.pos.x][delante.pos.y].con = null;
-						return false;
+					if (info.con.tipo == "tanque") {
+						info.con.vida--;
+					}else if (info.con.tipo == "bala") {
+						this._balas.delete(info.con.id);
+						vaciarCasilla(info.pos.x,info.pos.y);
 					}
 				}
 				return true;
@@ -303,29 +297,41 @@ class Tablero {
 		return false;
 	}
 
+	/**
+	 * Mueve todas las balas del tablero
+	 */
 	moverBalas() {
 		for (let bala of this._balas.values()) {
 			this.mover(bala.id, 'bala');
 		}
 	}
 
+	/**
+	 * Vacía la casilla que se encuentra en las posiciones dadas
+	 * @param  {number} posX posición en las columnas de la casilla
+	 * @param  {number} posY posición en las filas de la casilla
+	 */
 	vaciarCasilla(posX,posY){
 		this._tablero[posX][posY].con = null;
 	}
 
+	/**
+	 * Borra los tanques u objetos con vida que hayan llegado a cero
+	 * @return {array} un array que contiene los ids de los tanques eliminados
+	 */
 	limpiarTablero() {
-		let inf = this.info;
+		let inf = this.info.datos;
 		let tanks = [];
 		for (let obj of inf) {
-			if (obj.vida <= 0) {
+			if (obj.vida && obj.vida <= 0) {
 				if (obj.tipo == "tanque") {
-					tanks.push(this._tanques.get(obj.nombre));
-					this._tanques.delete(obj.nombre);
+					tanks.push(obj.id);
+					this._tanques.delete(obj.id);
 				}
-				this._tablero[obj.pos.x][obj.pos.y].con = null;
-				return tanks;
+				vaciarCasilla(obj.pos.x,obj.pos.y);
 			}
 		}
+		return tanks;
 	}
 
 }

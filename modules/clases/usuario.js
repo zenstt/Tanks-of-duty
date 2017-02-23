@@ -297,7 +297,6 @@ class usuario {
      * @return {Function}    cb
      */
     crearTanque(id, tanque, cb) {
-        
         let crear = "INSERT INTO usuarios.tanque (nombre, hp, ammo, urlia, usuario) VALUES ('" + tanque.nombre + "', '" + tanque.vida + "', '" + tanque.muni + "', '" + tanque.IA + "', '" + id + "');";
         let cliente = mysql.createConnection(this._mysqlconnection);
         cliente.connect((err) => {
@@ -366,6 +365,25 @@ class usuario {
                     return cb(err, 2);
                 } else {
                     return cb(err, 0);
+                }
+            });
+        });
+    }
+    consultarInfoTanque(idJugador,idTanque, cb) {
+        const buscar = 'SELECT ID,nombre,hp,ammo,urlia FROM usuarios.tanque where usuario = "' + idJugador + '" and ID = '+idTanque;
+        let cliente = mysql.createConnection(this._mysqlconnection);
+        cliente.connect((err) => {
+            if (err) {
+                return cb(err, 2);
+            }
+            cliente.query(buscar, (err, rows) => {
+                cliente.end();
+                if (err) {
+                    return cb(err, 2);
+                } else if (rows.length) {
+                    return cb(err, 0, rows[0]);
+                } else {
+                    return cb(err, 1)
                 }
             });
         });
