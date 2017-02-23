@@ -1,0 +1,2 @@
+node pruebaTablero.js
+pause

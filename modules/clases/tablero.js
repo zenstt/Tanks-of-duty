@@ -58,8 +58,7 @@ class Tablero {
 			for (let y = 0; y <= this._filas; y++) {
 				if (this._tablero[x][y].con !== null) {
 					elem.push({
-						posX: x,
-						posY: y,
+						pos:this._tablero[x][y].con.pos,
 						tipo: this._tablero[x][y].con.tipo
 					});
 				}
@@ -195,7 +194,7 @@ class Tablero {
 			//Si no hay nada delante, se mueve
 			if (delante.info.con === null) {
 				this.insertar(objeto, info.pos.x, info.pos.y);
-				vaciarCasilla(posicion.x,posicion.y);
+				this.vaciarCasilla(posicion.x,posicion.y);
 				if (type == "bala") {
 					this._balas.set(id, objeto);
 				} else {
@@ -215,13 +214,13 @@ class Tablero {
 						//el tanque se moverá igualmente, asi que el err se queda en false
 						this._balas.delete(info.con.id);
 						this.insertar(objeto, info.pos.x, info.pos.y);
-						vaciarCasilla(posicion.x,posicion.y);
+						this.vaciarCasilla(posicion.x,posicion.y);
 					}
 					//en cambio, las balas, si chocan con algo desaparecerán
 				} else if (type == "bala") {
 					resultado.err=true;
 					this._balas.delete(id);
-					vaciarCasilla(posicion.x,posicion.y)
+					this.vaciarCasilla(posicion.x,posicion.y)
 					//Hará que las rocas o los tanques pierdan vida
 					if (info.con.tipo == "tanque" || info.con.tipo == "roca") {
 						info.con.vida--;
@@ -229,7 +228,7 @@ class Tablero {
 					//las balas, al chocar, se borrarán entre ellas
 					} else if (info.con.tipo == "bala") {
 						this._balas.delete(info.con.id);
-						vaciarCasilla(info.pos.x,info.pos.y);
+						this.vaciarCasilla(info.pos.x,info.pos.y);
 						resultado.suceso="Chocó con otra bala";
 					}
 				}
@@ -240,7 +239,7 @@ class Tablero {
 			resultado.suceso="Llegó al límite del mapa";
 			if (type == "bala") {
 				this._balas.delete(id);
-				vaciarCasilla(posicion.x,posicion.y);
+				this.vaciarCasilla(posicion.x,posicion.y);
 			}
 		}
 		return resultado;
@@ -288,7 +287,7 @@ class Tablero {
 						info.con.vida--;
 					}else if (info.con.tipo == "bala") {
 						this._balas.delete(info.con.id);
-						vaciarCasilla(info.pos.x,info.pos.y);
+						this.vaciarCasilla(info.pos.x,info.pos.y);
 					}
 				}
 				return true;
@@ -328,7 +327,7 @@ class Tablero {
 					tanks.push(obj.id);
 					this._tanques.delete(obj.id);
 				}
-				vaciarCasilla(obj.pos.x,obj.pos.y);
+				this.vaciarCasilla(obj.pos.x,obj.pos.y);
 			}
 		}
 		return tanks;
