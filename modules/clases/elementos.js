@@ -21,8 +21,8 @@ class Tanque {
 		this._muni = muni || 50;
 		//Se guarda el tipo de elemento que es
 		this._tipo = "tanque";
-		this._x;
-		this._y;
+		this._x=-1;
+		this._y=-1;
 		this._IA="/";
 	}
 
