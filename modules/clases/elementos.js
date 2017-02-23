@@ -27,6 +27,19 @@ class Tanque {
 	}
 
 	// ------ GETTERS ------ //
+	
+	get info(){
+		return {
+			nombre:this._nombre,
+			vida:this._vida,
+			municion:this._muni,
+			tipo:this._tipo,
+			IA:this._IA,
+			x: this._x,
+			y: this._y,
+			o: this._o
+		};
+	}
 	/**
 	 * Devuelve la posición x e y del tanque junto a su orientación
 	 * @return {Object} devuelve las variables o,x e y en un objeto JSON
@@ -134,6 +147,15 @@ class Roca {
 	}
 		// ------ GETTERS ------ //
 
+
+	get info(){
+		return {
+			vida:this._vida,
+			tipo:this._tipo,
+			x: this._x,
+			y: this._y
+		};
+	}
 	/**
 	 * Devuelve la posición x e y de la roca
 	 * @return {Object} devuelve las variables x e y en un objeto JSON
@@ -191,6 +213,14 @@ class Bala {
 	}
 		// ------ GETTERS ------ //
 
+	get info(){
+		return {
+			tipo:this._tipo,
+			x: this._x,
+			y: this._y,
+			o: this._o
+		};
+	}
 	/**
 	 * Devuelve la posición x e y de la bala junto a su orientación
 	 * @return {Object} devuelve las variables o,x e y en un objeto JSON

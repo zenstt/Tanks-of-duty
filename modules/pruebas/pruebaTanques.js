@@ -87,9 +87,9 @@ console.log("-------------------------");
 
 console.log("Setter de la IA");
 console.log("-------------------------");
-datos=5;
+datos="/url/random/inventada.js";
 console.log("Datos básicos: "+JSON.stringify(datos));
-console.log("Antes =>"+JSON.stringify(tanque1.muni));
-tanque1.muni=datos;
-console.log("=>"+tanque1.muni);
+console.log("Antes =>"+JSON.stringify(tanque1.IA));
+tanque1.IA=datos;
+console.log("=>"+tanque1.IA);
 console.log("-------------------------");

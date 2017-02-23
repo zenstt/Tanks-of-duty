@@ -57,10 +57,7 @@ class Tablero {
 		for (let x = 0; x <= this._columnas; x++) {
 			for (let y = 0; y <= this._filas; y++) {
 				if (this._tablero[x][y].con !== null) {
-					elem.push({
-						pos: this._tablero[x][y].con.pos,
-						tipo: this._tablero[x][y].con.tipo
-					});
+					elem.push(this._tablero[x][y].con.info);
 				}
 			}
 		}
@@ -167,10 +164,10 @@ class Tablero {
 				return pos.y<this._filas ? {err:false,info:this._tablero[pos.x][pos.y + 1]}:{err:true,info:""};
 				break;
 			case "este":
-				return pos.y<this._columnas ? {err:false,info:this._tablero[pos.x + 1][pos.y]}:{err:true,info:""};
+				return pos.x<this._columnas ? {err:false,info:this._tablero[pos.x + 1][pos.y]}:{err:true,info:""};
 				break;
 			case "oeste":
-				return pos.y<0 ? {err:false,info:this._tablero[pos.x - 1][pos.y]}:{err:true,info:""};
+				return pos.x>0 ? {err:false,info:this._tablero[pos.x - 1][pos.y]}:{err:true,info:""};
 				break;
 		}
 	}
@@ -213,6 +210,7 @@ class Tablero {
 						//Las balas, en cambio, deben desaparecer ante este suceso
 						//el tanque se moverá igualmente, asi que el err se queda en false
 						this._balas.delete(info.con.id);
+						this.vaciarCasilla(info.pos.x,info.pos.y);
 						this.insertar(objeto, info.pos.x, info.pos.y);
 						this.vaciarCasilla(posicion.x,posicion.y);
 					}
@@ -300,8 +298,10 @@ class Tablero {
 	 * Mueve todas las balas del tablero
 	 */
 	moverBalas() {
-		for (let bala of this._balas.values()) {
-			this.mover(bala.id, 'bala');
+		if(this._balas.size){
+			for (let bala of this._balas.values()) {
+				this.mover(bala.id, 'bala');
+			}
 		}
 	}
 
