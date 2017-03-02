@@ -82,7 +82,10 @@ class Partida {
 	 * @param  {number} idJugador 
 	 */
 	moverTanque(idJugador) {
-		this._tablero.mover(this._jugadores.get(idJugador), "tanque");
+		let player = this._jugadores.get(idJugador);
+		if (player.vivo){
+			this._tablero.mover(player.tanque, "tanque");
+		}
 	}
 
 	/**
@@ -90,7 +93,10 @@ class Partida {
 	 * @param  {number} idJugador 
 	 */
 	dispararTanque(idJugador) {
-		this._tablero.disparar(this._jugadores.get(idJugador));
+		let player = this._jugadores.get(idJugador);
+		if (player.vivo){
+			this._tablero.disparar(player.tanque);
+		}
 	}
 
 	/**
@@ -99,17 +105,24 @@ class Partida {
 	 * @param  {string} direccion debe ser "izquierda" o "derecha" 
 	 */
 	girarTanque(idJugador, direccion) {
-		this._tablero.girar(this._jugadores.get(idJugador), direccion);
+		let player = this._jugadores.get(idJugador);
+		if (player.vivo){
+			this._tablero.girar(player.tanque, direccion);
+		}	
 	}
-
 	/**
 	 * genera un timer que será el que mueva las balas a cierta velocidad
 	 */
 	empezarPartida() {
 		var self = this;
 		let interval = setInterval(function(){
-			self._tablero.moverBalas
-		}, 500);
+			self._tablero.moverBalas();
+			let a = self._tablero.limpiarTablero();
+			for (let id of a){
+				self._jugadores.get(id).vivo=false;
+			}
+
+		}, 100);
 	}
 
 	/**
@@ -118,8 +131,8 @@ class Partida {
 	 * @param {number} idTanque  
 	 */
 	meterJugador(idJugador,nombreTanque, idTanque) {
-		this._jugadores.set(idJugador, idTanque);
-		let tanque = new elementos.tanque(nombreTanque,idTanque);
+		this._jugadores.set(idJugador, {tanque:idTanque,vivo:true});
+		let tanque = new elementos.tanque(nombreTanque,idTanque,idJugador);
 		this._tablero.insertarTanque(tanque);
 	}
 }

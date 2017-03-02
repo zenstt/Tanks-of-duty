@@ -179,10 +179,10 @@ class Tablero {
 	 * @return {nosé}      
 	 */
 	mover(id, type) {
+		
 		let objeto = type == "bala" ? this._balas.get(id) : this._tanques.get(id);
 		let posicion = objeto.pos;
 		let delante = this.casillaDelante(posicion);
-		console.log(delante)
 		let resultado={
 			err:false,
 			suceso:""
@@ -299,9 +299,6 @@ class Tablero {
 	 * Mueve todas las balas del tablero
 	 */
 	moverBalas() {
-		console.log(self)
-		console.log(this._balas)
-		console.log(typeof(this._balas))
 		if(this._balas.size){
 			for (let bala of this._balas.values()) {
 				this.mover(bala.id, 'bala');
@@ -326,22 +323,15 @@ class Tablero {
 		let inf = this.info.datos;
 		let tanks = [];
 		for (let obj of inf) {
-			if (obj.vida && obj.vida <= 0) {
+			if (obj.hasOwnProperty('vida') && obj.vida <= 0) {
 				if (obj.tipo == "tanque") {
-					tanks.push(obj.id);
+					tanks.push(obj.jugador);
 					this._tanques.delete(obj.id);
 				}
-				this.vaciarCasilla(obj.pos.x,obj.pos.y);
+				this.vaciarCasilla(obj.x,obj.y);
 			}
 		}
 		return tanks;
 	}
-	get test(){
-		return this._tanques;
-	}
-	get test2(){
-		return this._balas;
-	}
-
 }
 module.exports = Tablero;

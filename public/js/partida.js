@@ -4,7 +4,7 @@ var socket=io.connect('192.168.0.46:3000');
 // var socket=io.connect('localhost:3000',{'forceNew':true});
 
 socket.emit('entrarPartida',localStorage.getItem("idPartida"));
-socket.on('test',function(data){
+socket.on('actualizarPartidas',function(data){
 	console.log(data);
 });
 $(document).ready(() => {
@@ -18,7 +18,7 @@ $(document).ready(() => {
 			insertThings(res.partida.part);
 		}
 	})
-	$(window).keydown(function(e){
+	$(window).keyup(function(e){
 		console.log(e.keyCode)
 		switch (e.keyCode){
 			case 32: action('shoot');break;

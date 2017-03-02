@@ -1,7 +1,16 @@
 "use strict";
+// var socket = io.connect(window.location.hostname);
+var socket=io.connect('192.168.0.46:3000');
+// var socket=io.connect('localhost:3000',{'forceNew':true});
+
+socket.on('actualizarPartidas',function(data){
+	mostrarPartidas(data)
+});
+
 var selected = null;
 $(document).ready(function() {
-	consultar()
+	consultarTanques();
+	consultarPartidas();
 	$('#crearTanque').click(function(){
 		if ($('#tankName').val()){
 			$.ajax({
@@ -9,7 +18,7 @@ $(document).ready(function() {
 				data: {nombreTanque:$('#tankName').val()},
 				method: 'POST',
 				success: function(res, textStatus, xhr){
-					consultar();
+					consultarTanques();
 				}
 			})
 		}
@@ -28,6 +37,7 @@ $(document).ready(function() {
 					if (res.partida.error){
 						alert(res.partida.message);
 					} else {
+						socket.emit('newPartida');
 						localStorage.setItem("idPartida", res.partida.num);
 						window.location.href = res.url;	
 					}
@@ -44,7 +54,7 @@ function borrar(){
 			data: {id:id},
 			method: 'POST',
 			success: function(res, textStatus, xhr){
-				consultar();
+				consultarTanques();
 				console.log(res)
 			}
 		})
@@ -60,7 +70,7 @@ function modificar(){
 			data: {id:id,nombreTanque:name},
 			method: 'POST',
 			success: function(res, textStatus, xhr){
-				consultar();
+				consultarTanques();
 				console.log(res)
 			}
 		})
@@ -75,7 +85,52 @@ function seleccionarTanque(){
 		$('#'+selected).addClass('selected');
 	});
 }
-function consultar(){
+function unirsePartida(){
+	$('.partida').click(function(e){
+		let id = $(e.currentTarget).parent().attr('id');
+		$.ajax({
+			url:'/partidas/entrarPartida',
+			data: {idPartida:id,idTanque:selected},
+			method: 'POST',
+			success: function(res, textStatus, xhr){
+				if (res.error){
+					alert(res.partida.message);
+				} else {
+					localStorage.setItem("idPartida", res.num);
+					window.location.href = res.url;	
+				}
+			}
+		})
+	});
+}
+function consultarPartidas(){
+	$.ajax({
+		url:'/partidas/obtenerPartidas',
+		data: null,
+		method: 'POST',
+		success: function(res, textStatus, xhr){
+			if (!res.error){
+				mostrarPartidas(res.partidas);
+				unirsePartida();
+			}
+		}
+	})
+}
+function mostrarPartidas(partidas){
+let html='<div>';
+for (let partida of partidas){
+	html+='<div id="'+partida.id+'" class="tank">'
+	html+="<p class='nombre'> Nombre: "+partida.nombre+"</p>";
+	html+='<p> Medida: '+partida.medida+'</p>';
+	html+='<input type="button" class="partida" value="Unirse"/>'
+	html+='</div>'
+	html+='<hr>';
+}
+html+='</div>';
+$('#misPartidas').html(html);
+unirsePartida();
+}
+function consultarTanques(){
 	$.ajax({
 		url:'/tanques/consultar',
 		data: null,

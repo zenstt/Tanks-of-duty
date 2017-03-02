@@ -13,9 +13,10 @@ class Tanque {
 	 * x representa la posición segun las columnas
 	 * y representa la posición segun las filas
 	 */
-	constructor(nombre, id, vida, muni, o) {
+	constructor(nombre, id, jugador, vida, muni, o) {
 		this._nombre = nombre;
 		this._id=id || null;
+		this._jugador = jugador || null;
 		this._o = o || direcciones[Math.floor(Math.random() * 4)];
 		this._vida = vida || 10;
 		this._muni = muni || 50;
@@ -30,6 +31,8 @@ class Tanque {
 	
 	get info(){
 		return {
+			id:this._id,
+			jugador:this._jugador,
 			nombre:this._nombre,
 			vida:this._vida,
 			municion:this._muni,
@@ -141,7 +144,7 @@ class Roca {
 	constructor() {
 		this._x;
 		this._y;
-		this._vida = 2;
+		this._vida = 3;
 		//Se guarda el tipo de elemento que es
 		this._tipo = "roca";
 	}

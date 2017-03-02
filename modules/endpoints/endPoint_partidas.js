@@ -30,6 +30,11 @@ var num = 0;
 
 var partidas = new Map();
 
+let part = new partida(777,"juanita",10);
+part.insertarRocas(Math.floor((10*10)*0.07));
+partidas[777]={partida:part,socketJugadores:[]};
+part.empezarPartida();
+
 function crearPartida(nombre,medida,idJugador,idTanque,cb){
     if (medida>=3 && medida<=15){
         num++;
@@ -57,6 +62,9 @@ function obtenerPartida(id){
     return a ? {error:false,part:a}:{error:true,message:"No se encuentra la partida"};
 }
 function meterJugador(idJugador,idTanque,idPartida,cb){
+    console.log(idJugador)
+    console.log(idTanque)
+    console.log(idPartida)
     let user = new usuario('nombreTanque',mysqlconnection);
     user.consultarInfoTanque(idJugador,idTanque,(err,code,info)=>{
         if (code){
@@ -98,6 +106,29 @@ router.post('/obtenerPartida', (req, res) => {
     res.json({partida:part});
     res.end();
 });
+router.post('/entrarPartida', (req, res) => {
+    meterJugador(req.user.ID,req.body.idTanque,req.body.idPartida,(code)=>{
+        if (code){
+            res.json({error:false,num:req.body.idPartida,url:'/partida'});
+            res.end();
+        } else {
+            res.json({error:true,message:"No se encuentra la partida"});
+            res.end();
+        }
+    });
+});
+router.post('/obtenerPartidas', (req, res) => {
+    let a = [];
+    for (let id in partidas){
+        a.push({
+            id:id,
+            nombre:partidas[id].partida.nombre,
+            medida:partidas[id].partida.medida
+        })
+    }
+    res.json({error:false,partidas:a});
+    res.end();
+});
 router.post('/move',(req,res)=>{
     let part = moverJugador(req.user.ID,req.body.data.idPartida,req.body.data.accion,req.body.data.direccion);
     res.json({partida:part});
@@ -113,8 +144,16 @@ router.get('/page', function(req, res) {
 
 function socket(io,client){
     console.log('Client connected');
-    client.on('entrarPartida',function(data){
-        partidas[data].socketJugadores[client.id]=client;
+    client.on('newPartida',function(data){
+        let a = [];
+        for (let id in partidas){
+            a.push({
+                id:id,
+                nombre:partidas[id].partida.nombre,
+                medida:partidas[id].partida.medida
+            })
+        }
+        io.emit("actualizarPartidas",a);
     })
     client.on('disconnect', function() {
         console.log('Client disconnected');
