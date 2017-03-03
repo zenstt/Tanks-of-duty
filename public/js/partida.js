@@ -3,17 +3,23 @@
 var socket=io.connect('192.168.0.46:3000');
 // var socket=io.connect('localhost:3000',{'forceNew':true});
 
-socket.emit('entrarPartida',localStorage.getItem("idPartida"));
-socket.on('actualizarPartidas',function(data){
-	console.log(data);
+socket.on('update',function(data){
+	console.log(data)
+	createBoard(data.partida.dimensiones.columnas);
+	insertThings(data.partida.partida);
 });
 $(document).ready(() => {
+	let id = localStorage.getItem("idPartida");
+	
 	$.ajax({
 		url:'/partidas/obtenerPartida',
-		data: {id:localStorage.getItem("idPartida")},
+		data: {id:id},
 		method: 'POST',
 		success: function(res, textStatus, xhr){
+			console.log(res)
 			// console.log(res)
+			localStorage.setItem("idJugador",res.id);
+			socket.emit('newSala',{idSala:id,idJugador:res.id});
 			createBoard(res.partida.part.dimensiones.columnas);
 			insertThings(res.partida.part);
 		}
@@ -32,6 +38,7 @@ $(document).ready(() => {
 function action(act,direction){
 	let data = {
 		idPartida:localStorage.getItem("idPartida"),
+		idJugador:localStorage.getItem("idJugador"),
 		accion:act,
 		direccion:null
 	}
@@ -39,16 +46,17 @@ function action(act,direction){
 		data.direccion=direction;
 	}
 	console.log(data)
-	$.ajax({
-		url:'/partidas/move',
-		data: {data:data},
-		method: 'POST',
-		success: function(res, textStatus, xhr){
-			console.log(res)
-			createBoard(res.partida.dimensiones.columnas);
-			insertThings(res.partida);
-		}
-	})
+	socket.emit('move',data);
+	// $.ajax({
+	// 	url:'/partidas/move',
+	// 	data: {data:data},
+	// 	method: 'POST',
+	// 	success: function(res, textStatus, xhr){
+	// 		console.log(res)
+	// 		createBoard(res.partida.dimensiones.columnas);
+	// 		insertThings(res.partida);
+	// 	}
+	// })
 }
 
 function insertObject(object){

@@ -18,6 +18,7 @@ $(document).ready(function(){
 				method: 'POST',
 				success: function(res, textStatus, xhr){
 					if(res.login){
+						localStorage.setItem('id',res.id);
 						$('#error').html('Login correcto');
 						window.location.href = res.url;
 					}

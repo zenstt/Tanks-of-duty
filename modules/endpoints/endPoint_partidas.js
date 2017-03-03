@@ -22,7 +22,7 @@ router.use(expressSession({
 const mysqlconnection = {
     user: "zenstt",
     password: "1234",
-    host: "192.168.0.32",
+    host: "localhost",
     port: 3306
 }
 
@@ -32,7 +32,7 @@ var partidas = new Map();
 
 let part = new partida(777,"juanita",10);
 part.insertarRocas(Math.floor((10*10)*0.07));
-partidas[777]={partida:part,socketJugadores:[]};
+partidas[777]=part
 part.empezarPartida();
 
 function crearPartida(nombre,medida,idJugador,idTanque,cb){
@@ -40,7 +40,7 @@ function crearPartida(nombre,medida,idJugador,idTanque,cb){
         num++;
         let part = new partida(num,nombre,medida);
         part.insertarRocas(Math.floor((medida*medida)*0.07));
-        partidas[num]={partida:part,socketJugadores:[]};
+        partidas[num]=part;
         part.empezarPartida();
 
         meterJugador(idJugador,idTanque,num,(err)=>{
@@ -57,7 +57,7 @@ function crearPartida(nombre,medida,idJugador,idTanque,cb){
 function obtenerPartida(id){
     let a=null;
     if (partidas[id]){
-        a = partidas[id].partida.tablero;
+        a = partidas[id].tablero;
     }
     return a ? {error:false,part:a}:{error:true,message:"No se encuentra la partida"};
 }
@@ -70,7 +70,7 @@ function meterJugador(idJugador,idTanque,idPartida,cb){
         if (code){
             cb(false);
         }else{
-            partidas[idPartida].partida.meterJugador(idJugador,info.nombre,idTanque);
+            partidas[idPartida].meterJugador(idJugador,info.nombre,idTanque);
             cb(true);
         }
     });
@@ -79,15 +79,15 @@ function moverJugador(idJugador,idPartida,accion,direccion){
     let part = partidas[idPartida];
     if (part){
         if (direccion){
-            part.partida.girarTanque(idJugador,direccion);
+            part.girarTanque(idJugador,direccion);
         } else {
             if(accion=="mover"){
-                part.partida.moverTanque(idJugador);
+                part.moverTanque(idJugador);
             } else {
-                part.partida.dispararTanque(idJugador);
+                part.dispararTanque(idJugador);
             }
         }
-        return part.partida.tablero;
+        return part.tablero;
     } else {
 
     }
@@ -103,7 +103,7 @@ router.post('/crearPartida', (req, res) => {
 });
 router.post('/obtenerPartida', (req, res) => {
     let part = obtenerPartida(req.body.id);
-    res.json({partida:part});
+    res.json({partida:part,id:req.user.ID});
     res.end();
 });
 router.post('/entrarPartida', (req, res) => {
@@ -122,8 +122,8 @@ router.post('/obtenerPartidas', (req, res) => {
     for (let id in partidas){
         a.push({
             id:id,
-            nombre:partidas[id].partida.nombre,
-            medida:partidas[id].partida.medida
+            nombre:partidas[id].nombre,
+            medida:partidas[id].medida
         })
     }
     res.json({error:false,partidas:a});
@@ -149,11 +149,22 @@ function socket(io,client){
         for (let id in partidas){
             a.push({
                 id:id,
-                nombre:partidas[id].partida.nombre,
-                medida:partidas[id].partida.medida
+                nombre:partidas[id].nombre,
+                medida:partidas[id].medida
             })
         }
         io.emit("actualizarPartidas",a);
+    });
+    client.on('newSala',function(data){
+        client.room=data.idSala;
+        client.join(client.room);
+        console.log("SA CONECTARTO PACO");
+    })
+    client.on('move',function(data){
+        console.log("Hola!!")
+        console.log(client.room)
+        let part = moverJugador(parseInt(data.idJugador),data.idPartida,data.accion,data.direccion);
+        client.broadcast.to(client.room).emit('update','{partida:part}')
     })
     client.on('disconnect', function() {
         console.log('Client disconnected');
