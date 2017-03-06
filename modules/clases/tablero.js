@@ -282,7 +282,7 @@ class Tablero {
 					this._balas.set(contarBala, bala);
 					contarBala++;
 				} else {
-					if (info.con.tipo == "tanque") {
+					if (info.con.tipo == "tanque" || info.con.tipo == "roca") {
 						info.con.vida--;
 					}else if (info.con.tipo == "bala") {
 						this._balas.delete(info.con.id);

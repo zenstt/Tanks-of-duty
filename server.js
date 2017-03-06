@@ -23,9 +23,14 @@ const app = express();
 const server = http.createServer(app);
 var io = require('socket.io')(server);
 
+var port = process.env.PORT || 3000;
+app.set('view engine', 'ejs');
+
 app.use(BodyParser.json()); //Recibir peticiones POST con datos en json
 app.use(BodyParser.urlencoded({extended:true})); //para formularios en post
 app.use(express.static(path.join(__dirname,'public')));//dirección donde se encuentra la lógica de cliente
+
+
 
 
 /*Configuración del uso de cookies y passport*/

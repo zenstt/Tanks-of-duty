@@ -10,6 +10,10 @@ const usuario = require('../clases/usuario.js');
 const elementos = require('../clases/elementos.js');
 const app = express();
 
+const http = require('http');
+const server = http.createServer(app);
+var io = null;
+
 const router = express.Router();
 
 router.use(cookieParser());
@@ -27,7 +31,7 @@ const mysqlconnection = {
 }
 
 var num = 0;
-
+var interval = null;
 var partidas = new Map();
 
 let part = new partida(777,"juanita",10);
@@ -41,8 +45,8 @@ function crearPartida(nombre,medida,idJugador,idTanque,cb){
         let part = new partida(num,nombre,medida);
         part.insertarRocas(Math.floor((medida*medida)*0.07));
         partidas[num]=part;
+         // part.empezarPartida();
         part.empezarPartida();
-
         meterJugador(idJugador,idTanque,num,(err)=>{
             if (err){
                 cb({error:false,num:num});
@@ -62,9 +66,6 @@ function obtenerPartida(id){
     return a ? {error:false,part:a}:{error:true,message:"No se encuentra la partida"};
 }
 function meterJugador(idJugador,idTanque,idPartida,cb){
-    console.log(idJugador)
-    console.log(idTanque)
-    console.log(idPartida)
     let user = new usuario('nombreTanque',mysqlconnection);
     user.consultarInfoTanque(idJugador,idTanque,(err,code,info)=>{
         if (code){
@@ -141,8 +142,7 @@ router.get('/page', function(req, res) {
         url: '/partida'
     });
 });
-
-function socket(io,client){
+function socket(io,client,send){
     console.log('Client connected');
     client.on('newPartida',function(data){
         let a = [];
@@ -156,18 +156,23 @@ function socket(io,client){
         io.emit("actualizarPartidas",a);
     });
     client.on('newSala',function(data){
+
         client.room=data.idSala;
+        client.intervalo = setInterval(function(){
+            client.emit('update',{partida:partidas[client.room].tablero});
+        },100);
         client.join(client.room);
-        console.log("SA CONECTARTO PACO");
     })
     client.on('move',function(data){
-        console.log("Hola!!")
-        console.log(client.room)
         let part = moverJugador(parseInt(data.idJugador),data.idPartida,data.accion,data.direccion);
-        client.broadcast.to(client.room).emit('update','{partida:part}')
+        io.to(client.room).emit('update',{partida:part})
     })
     client.on('disconnect', function() {
         console.log('Client disconnected');
     });
+    // client.on('refresh',function(data){
+    //     let part = partidas[data.idPartida].tablero;
+    //     client.emit('update',{partida:part});
+    // });
 }
 module.exports = {router:router, socket:socket};

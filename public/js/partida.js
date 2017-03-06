@@ -1,13 +1,23 @@
 "use strict";
 // var socket = io.connect(window.location.hostname);
-var socket=io.connect('192.168.0.46:3000');
+var socket=io.connect('192.168.0.15:3000');
 // var socket=io.connect('localhost:3000',{'forceNew':true});
+var timer = null;
 
 socket.on('update',function(data){
 	console.log(data)
 	createBoard(data.partida.dimensiones.columnas);
-	insertThings(data.partida.partida);
+	insertThings(data.partida);
 });
+
+// timer = setInterval(function(){
+// 	let data = {
+// 		idPartida:localStorage.getItem("idPartida"),
+// 		idJugador:localStorage.getItem("idJugador"),
+// 	}
+// 	socket.emit('refresh',data);
+// },100);
+
 $(document).ready(() => {
 	let id = localStorage.getItem("idPartida");
 	

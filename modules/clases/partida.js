@@ -121,7 +121,6 @@ class Partida {
 			for (let id of a){
 				self._jugadores.get(id).vivo=false;
 			}
-
 		}, 100);
 	}
 

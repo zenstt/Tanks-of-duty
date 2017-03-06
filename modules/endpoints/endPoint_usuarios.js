@@ -124,7 +124,7 @@ passport.use(new LocalStrategy(function(username, password, done) {
 passport.use(new TwitterStrategy({
     consumerKey: config.twitter.key,
     consumerSecret: config.twitter.secret,
-    callback: 'http://localhost:3000/login/auth/twittter/callback'
+    callback: 'http://192.168.0.15:3000/login/auth/twittter/callback'
 }, (token, tokenSecret, profile, done) => {
     let datos = {
         id: profile.id,
@@ -138,7 +138,7 @@ passport.use(new TwitterStrategy({
 passport.use(new FacebookStrategy({
         clientID: config.facebook.id,
         clientSecret: config.facebook.secret,
-        callbackURL: 'http://localhost:3000/login/auth/facebook/callback'
+        callbackURL: 'http://192.168.0.15:3000/login/auth/facebook/callback'
     },
     function(token, refreshToken, profile, done) {
         let datos = {
@@ -153,7 +153,7 @@ passport.use(new FacebookStrategy({
 passport.use(new GoogleStrategy({
         clientID: config.google.id,
         clientSecret: config.google.secret,
-        callbackURL: "http://localhost:3000/login/auth/google/callback"
+        callbackURL: "http://192.168.0.15/login/auth/google/callback"
     },
     function(accessToken, refreshToken, profile, done) {
         console.log(profile)
