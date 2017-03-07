@@ -21,6 +21,7 @@ class Partida {
 		//filas y como columnas
 		this._tablero = new tablero(nombre, medida, medida);
 		this._jugadores = new Map();
+		this._empezada=false;
 	}
 
 	/**
@@ -92,7 +93,7 @@ class Partida {
 	 */
 	dispararTanque(idJugador) {
 		let player = this._jugadores.get(idJugador);
-		if (player.vivo){
+		if (player && player.vivo){
 			this._tablero.disparar(player.tanque);
 		}
 	}
@@ -104,7 +105,7 @@ class Partida {
 	 */
 	girarTanque(idJugador, direccion) {
 		let player = this._jugadores.get(idJugador);
-		if (player.vivo){
+		if (player && player.vivo){
 			this._tablero.girar(player.tanque, direccion);
 		}	
 	}
@@ -115,13 +116,27 @@ class Partida {
 		var self = this;
 		let interval = setInterval(function(){
 			self._tablero.moverBalas();
-			let a = self._tablero.limpiarTablero();
-			for (let id of a){
+			let partida = self._tablero.limpiarTablero();
+			for (let id of partida.tanques){
 				self._jugadores.get(id).vivo=false;
+			}
+			console.log(self._empezada);
+			if(self._empezada && partida.acabada){
+				clearInterval(interval);
+				self.acabarPartida();
 			}
 		}, 100);
 	}
 
+	acabarPartida(){
+		let ganador;
+		for(let jugador of this._jugadores){
+			console.log(jugador);
+		}
+		// return {
+		// 	idpartida: this._id
+		// }
+	}
 	/**
 	 * añade el jugador a la partida con su tanque correspondiente
 	 * @param {number} idJugador 
@@ -129,6 +144,9 @@ class Partida {
 	 */
 	meterJugador(idJugador,nombreTanque, idTanque) {
 		this._jugadores.set(idJugador, {tanque:idTanque,vivo:true});
+		if(this._jugadores.size>1){
+			this._empezada=true;
+		}
 		let tanque = new elementos.tanque(nombreTanque,idTanque,idJugador);
 		this._tablero.insertarTanque(tanque);
 	}

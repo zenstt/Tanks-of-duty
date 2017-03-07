@@ -317,7 +317,7 @@ class Tablero {
 
 	/**
 	 * Borra los tanques u objetos con vida que hayan llegado a cero
-	 * @return {array} un array que contiene los ids de los tanques eliminados
+	 * @return {Object} un obgjeto que, si no quedan mas que un tanque, devolvera true y un array que contiene los ids de los tanques eliminados
 	 */
 	limpiarTablero() {
 		let inf = this.info.datos;
@@ -331,7 +331,7 @@ class Tablero {
 				this.vaciarCasilla(obj.x,obj.y);
 			}
 		}
-		return tanks;
+		return this._tanques.size<=1 ? {acabada:false, tanques:tanks}:{acabada:true,tanques:tanks};
 	}
 }
 module.exports = Tablero;
