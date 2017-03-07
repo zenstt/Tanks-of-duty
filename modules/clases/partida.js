@@ -1,9 +1,7 @@
 'use strict';
 const elementos = require('./elementos');
 const tablero = require('./tablero');
-const mongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
-const urlMongo = require('../config/conf.js').mongo.url;
 
 class Partida {
 	/**
