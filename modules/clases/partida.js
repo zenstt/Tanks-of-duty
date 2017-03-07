@@ -120,7 +120,7 @@ class Partida {
 			for (let id of partida.tanques){
 				self._jugadores.get(id).vivo=false;
 			}
-			console.log(self._empezada);
+			console.log(partida.acabada);
 			if(self._empezada && partida.acabada){
 				clearInterval(interval);
 				cb(self.acabarPartida());

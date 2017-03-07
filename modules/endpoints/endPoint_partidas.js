@@ -39,7 +39,9 @@ var timers = new Map();
 let part = new partida(777,"juanita",10);
 part.insertarRocas(Math.floor((10*10)*0.07));
 partidas[777]=part
-part.empezarPartida();
+part.empezarPartida((data)=>{
+    timers[data.idpartida].winner=data.ganador;
+});
 
 function crearPartida(nombre,medida,idJugador,idTanque,cb){
     if (medida>=3 && medida<=15){
@@ -48,7 +50,9 @@ function crearPartida(nombre,medida,idJugador,idTanque,cb){
         part.insertarRocas(Math.floor((medida*medida)*0.07));
         partidas[num]=part;
          // part.empezarPartida();
-        part.empezarPartida();
+        part.empezarPartida((data)=>{
+            timers[data.idpartida].winner=data.ganador;
+        });
         meterJugador(idJugador,idTanque,num,(err)=>{
             if (err){
                 cb({error:false,num:num});
@@ -163,8 +167,12 @@ function socket(io,client){
         if (!timers[client.room]){
              let timer = setInterval(function(){
                 io.to(client.room).emit('update',{partida:partidas[client.room].tablero});
+                if (timers[client.room].ended){
+                    clearInterval(timers[client.room].timer);
+                    io.to(client.room).emit('endMatch',timers[client.room].winner);
+                }
             },35);
-            timers[client.room] = {id:data.idSala,timer:timer}
+            timers[client.room] = {id:data.idSala,timer:timer,ended:false,winner:null}
         }
         client.join(client.room);
     })

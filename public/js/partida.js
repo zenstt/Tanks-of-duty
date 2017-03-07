@@ -8,6 +8,9 @@ socket.on('update',function(data){
 	createBoard(data.partida.dimensiones.columnas);
 	insertThings(data.partida);
 });
+socket.on('endMatch',function(data){
+	console.log(data);
+});
 loadImages();
 $(document).ready(() => {
 	let id = localStorage.getItem("idPartida");
