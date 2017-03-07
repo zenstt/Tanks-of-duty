@@ -112,7 +112,7 @@ class Partida {
 	/**
 	 * genera un timer que será el que mueva las balas a cierta velocidad
 	 */
-	empezarPartida() {
+	empezarPartida(cb) {
 		var self = this;
 		let interval = setInterval(function(){
 			self._tablero.moverBalas();
@@ -123,19 +123,22 @@ class Partida {
 			console.log(self._empezada);
 			if(self._empezada && partida.acabada){
 				clearInterval(interval);
-				self.acabarPartida();
+				cb(self.acabarPartida());
 			}
 		}, 100);
 	}
 
 	acabarPartida(){
-		let ganador;
+		let ganador=null;
 		for(let jugador of this._jugadores){
-			console.log(jugador);
+			if(jugador[1].vivo){
+				ganador={jugador:jugador[0],tanque:jugador[1].tanque};
+			}
 		}
-		// return {
-		// 	idpartida: this._id
-		// }
+		return {
+			idpartida: this._id,
+			ganador:ganador
+		}
 	}
 	/**
 	 * añade el jugador a la partida con su tanque correspondiente
