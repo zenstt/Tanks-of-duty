@@ -81,7 +81,7 @@ class Partida {
 	 */
 	moverTanque(idJugador) {
 		let player = this._jugadores.get(idJugador);
-		if (player.vivo){
+		if (player && player.vivo){
 			this._tablero.mover(player.tanque, "tanque");
 		}
 	}

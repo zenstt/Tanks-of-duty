@@ -5,29 +5,17 @@ var socket=io.connect('192.168.0.15:3000');
 var timer = null;
 
 socket.on('update',function(data){
-	console.log(data)
 	createBoard(data.partida.dimensiones.columnas);
 	insertThings(data.partida);
 });
-
-// timer = setInterval(function(){
-// 	let data = {
-// 		idPartida:localStorage.getItem("idPartida"),
-// 		idJugador:localStorage.getItem("idJugador"),
-// 	}
-// 	socket.emit('refresh',data);
-// },100);
 loadImages();
 $(document).ready(() => {
 	let id = localStorage.getItem("idPartida");
-	
 	$.ajax({
 		url:'/partidas/obtenerPartida',
 		data: {id:id},
 		method: 'POST',
 		success: function(res, textStatus, xhr){
-			console.log(res)
-			// console.log(res)
 			localStorage.setItem("idJugador",res.id);
 			socket.emit('newSala',{idSala:id,idJugador:res.id});
 			createBoard(res.partida.part.dimensiones.columnas);
@@ -35,7 +23,6 @@ $(document).ready(() => {
 		}
 	})
 	$(window).keyup(function(e){
-		console.log(e.keyCode)
 		switch (e.keyCode){
 			case 32: action('shoot');break;
 			case 37: action('girar','izquierda');break;
@@ -65,22 +52,10 @@ function action(act,direction){
 	if(act=='girar'){
 		data.direccion=direction;
 	}
-	console.log(data)
 	socket.emit('move',data);
-	// $.ajax({
-	// 	url:'/partidas/move',
-	// 	data: {data:data},
-	// 	method: 'POST',
-	// 	success: function(res, textStatus, xhr){
-	// 		console.log(res)
-	// 		createBoard(res.partida.dimensiones.columnas);
-	// 		insertThings(res.partida);
-	// 	}
-	// })
 }
 
 function insertObject(object){
-	// console.log(object)
 	let row = object.y
 	let col = object.x
 	if (object.tipo=='roca'){

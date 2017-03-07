@@ -26,13 +26,15 @@ router.use(expressSession({
 const mysqlconnection = {
     user: "zenstt",
     password: "1234",
-    host: "52.57.173.168",
+    // host: "52.57.173.168",
+    host: "localhost",
     port: 3306
 }
 
 var num = 0;
 var interval = null;
 var partidas = new Map();
+var timers = new Map();
 
 let part = new partida(777,"juanita",10);
 part.insertarRocas(Math.floor((10*10)*0.07));
@@ -142,7 +144,7 @@ router.get('/page', function(req, res) {
         url: '/partida'
     });
 });
-function socket(io,client,send){
+function socket(io,client){
     console.log('Client connected');
     client.on('newPartida',function(data){
         let a = [];
@@ -156,11 +158,14 @@ function socket(io,client,send){
         io.emit("actualizarPartidas",a);
     });
     client.on('newSala',function(data){
-
         client.room=data.idSala;
-        client.intervalo = setInterval(function(){
-            client.emit('update',{partida:partidas[client.room].tablero});
-        },100);
+        let buli = true;
+        if (!timers[client.room]){
+             let timer = setInterval(function(){
+                io.to(client.room).emit('update',{partida:partidas[client.room].tablero});
+            },35);
+            timers[client.room] = {id:data.idSala,timer:timer}
+        }
         client.join(client.room);
     })
     client.on('move',function(data){
@@ -170,9 +175,5 @@ function socket(io,client,send){
     client.on('disconnect', function() {
         console.log('Client disconnected');
     });
-    // client.on('refresh',function(data){
-    //     let part = partidas[data.idPartida].tablero;
-    //     client.emit('update',{partida:part});
-    // });
 }
 module.exports = {router:router, socket:socket};

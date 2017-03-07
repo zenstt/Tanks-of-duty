@@ -4,7 +4,8 @@ var socket=io.connect('192.168.0.15:3000');
 // var socket=io.connect('localhost:3000',{'forceNew':true});
 
 socket.on('actualizarPartidas',function(data){
-	unirsePartida();
+	console.log(data)
+	mostrarPartidas(data);
 });
 
 var selected = null;
@@ -12,18 +13,21 @@ $(document).ready(function() {
 	consultarTanques();
 	consultarPartidas();
 	$('#crearTanque').click(function(){
+		$(this).attr('disabled',true);
 		if ($('#tankName').val()){
 			$.ajax({
 				url:'/tanques/crear',
 				data: {nombreTanque:$('#tankName').val()},
 				method: 'POST',
 				success: function(res, textStatus, xhr){
+					$('#crearTanque').attr('disabled',false);
 					consultarTanques();
 				}
 			})
 		}
 	})
 	$('#crearPartida').click(function(){
+		$(this).attr('disabled',true);
 		if ($('#nombrePartida').val() && $('#casillas').val() && selected){
 			$.ajax({
 				url:'/partidas/crearPartida',
@@ -34,9 +38,11 @@ $(document).ready(function() {
 				},
 				method: 'POST',
 				success: function(res, textStatus, xhr){
+					$('#crearPartida').attr('disabled',false);
 					if (res.partida.error){
 						alert(res.partida.message);
 					} else {
+						socket.emit('newPartida',null);
 						localStorage.setItem("idPartida", res.partida.num);
 						window.location.href = res.url;	
 					}
@@ -47,6 +53,8 @@ $(document).ready(function() {
 });;
 function borrar(){
 	$('.borrar').click(function(e){
+		$(this).attr('disabled',true);
+		self = this;
 		let id = $(e.currentTarget).parent().attr('id');
 		$.ajax({
 			url:'/tanques/borrar',
@@ -54,7 +62,7 @@ function borrar(){
 			method: 'POST',
 			success: function(res, textStatus, xhr){
 				consultarTanques();
-				console.log(res)
+				$(self).attr('disabled',false);
 			}
 		})
 	});
@@ -86,12 +94,15 @@ function seleccionarTanque(){
 }
 function unirsePartida(){
 	$('.partida').on('click',function(e){
+		$(this).attr('disabled',true);
+		self = this;
 		let id = $(e.currentTarget).parent().attr('id');
 		$.ajax({
 			url:'/partidas/entrarPartida',
 			data: {idPartida:id,idTanque:selected},
 			method: 'POST',
 			success: function(res, textStatus, xhr){
+				$(self).attr('disabled',false);
 				if (res.error){
 					alert(res.partida.message);
 				} else {

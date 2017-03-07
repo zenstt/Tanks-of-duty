@@ -18,7 +18,8 @@ router.use(expressSession({
 const mysqlconnection = {
     user: "zenstt",
     password: "1234",
-    host: "52.57.173.168",
+    // host: "52.57.173.168",
+    host: "localhost",
     port: 3306
 }
 
