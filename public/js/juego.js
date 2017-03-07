@@ -150,7 +150,7 @@ function consultarTanques(){
 				}
 				html+='</div>';
 				$('#misTanques').html(html);
-				if (res.tanques){
+				if (res.tanques.length){
 					if (!selected){
 						selected=res.tanques[0].ID
 					}

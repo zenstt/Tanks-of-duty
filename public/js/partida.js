@@ -17,7 +17,7 @@ socket.on('update',function(data){
 // 	}
 // 	socket.emit('refresh',data);
 // },100);
-
+loadImages();
 $(document).ready(() => {
 	let id = localStorage.getItem("idPartida");
 	
@@ -45,6 +45,16 @@ $(document).ready(() => {
 	})
 });
 
+function loadImages(){
+	$('#loadImages').append("<img src='img/bala_este.png'/>");
+	$('#loadImages').append("<img src='img/bala_oeste.png'/>");
+	$('#loadImages').append("<img src='img/bala_norte.png'/>");
+	$('#loadImages').append("<img src='img/tanque_este.png'/>");
+	$('#loadImages').append("<img src='img/tanque_oeste.png'/>");
+	$('#loadImages').append("<img src='img/tanque_norte.png'/>");
+	$('#loadImages').append("<img src='img/tanque_sur.png'/>");
+	$('#loadImages').empty();
+}
 function action(act,direction){
 	let data = {
 		idPartida:localStorage.getItem("idPartida"),
