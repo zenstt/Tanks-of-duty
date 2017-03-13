@@ -344,7 +344,7 @@ class Tablero {
 		//
 		//
 		//
-		return this._tanques.size>=1 ? {acabada:false, tanques:tanks}:{acabada:true,tanques:tanks};
+		return this._tanques.size>1 ? {acabada:false, tanques:tanks}:{acabada:true,tanques:tanks};
 	}
 }
 module.exports = Tablero;
