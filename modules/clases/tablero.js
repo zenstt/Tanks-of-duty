@@ -331,20 +331,7 @@ class Tablero {
 				this.vaciarCasilla(obj.x,obj.y);
 			}
 		}
-		//
-		//
-		//
-		//
-		//
-		//
-		/* Esto es un comentario para saber que tenemos que arreglar esto */
-		//
-		//
-		//
-		//
-		//
-		//
-		return this._tanques.size>=1 ? {acabada:false, tanques:tanks}:{acabada:true,tanques:tanks};
+		return this._tanques.size>1 ? {acabada:false, tanques:tanks}:{acabada:true,tanques:tanks};
 	}
 }
 module.exports = Tablero;
