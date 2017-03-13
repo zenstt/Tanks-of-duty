@@ -120,17 +120,16 @@ class Partida {
 			for (let id of partida.tanques){
 				self._jugadores.get(id).vivo=false;
 			}
-			console.log("Empezada: "+self._empezada);
-			console.log("Acabada: "+partida.acabada);
 			if(self._empezada && partida.acabada){
 				clearInterval(interval);
+
 				cb(self.acabarPartida());
 			}
 		}, 100);
 	}
 
 	acabarPartida(){
-		let ganador=null;
+		let ganador='null';
 		for(let jugador of this._jugadores){
 			if(jugador[1].vivo){
 				ganador={jugador:jugador[0],tanque:jugador[1].tanque};

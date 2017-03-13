@@ -9,7 +9,17 @@ socket.on('update',function(data){
 	insertThings(data.partida);
 });
 socket.on('endMatch',function(data){
-	console.log(data);
+	$(window).off('keyup');
+	setTimeout(function(){
+		if (data){
+			alert("¡El tanque '"+data+"' ha ganado la partida!");
+		} else {
+			alert("¡Empate!");
+		}
+		window.location.href = '/juego';
+	},400);
+	
+	
 });
 loadImages();
 $(document).ready(() => {

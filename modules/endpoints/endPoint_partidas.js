@@ -40,6 +40,7 @@ let part = new partida(777,"juanita",10);
 part.insertarRocas(Math.floor((10*10)*0.07));
 partidas[777]=part
 part.empezarPartida((data)=>{
+    console.log(data);
     timers[data.idpartida].winner=data.ganador;
 });
 
@@ -51,6 +52,7 @@ function crearPartida(nombre,medida,idJugador,idTanque,cb){
         partidas[num]=part;
          // part.empezarPartida();
         part.empezarPartida((data)=>{
+            console.log(data);
             timers[data.idpartida].winner=data.ganador;
         });
         meterJugador(idJugador,idTanque,num,(err)=>{
@@ -167,9 +169,29 @@ function socket(io,client){
         if (!timers[client.room]){
              let timer = setInterval(function(){
                 io.to(client.room).emit('update',{partida:partidas[client.room].tablero});
-                if (timers[client.room].ended){
+                console.log(timers[client.room].winner);
+                if (timers[client.room].winner || timers[client.room].winner=='null'){
                     clearInterval(timers[client.room].timer);
-                    io.to(client.room).emit('endMatch',timers[client.room].winner);
+                    console.log("test")
+                    let usu = new usuario("winner",mysqlconnection);
+                    if (timers[client.room].winner!="null"){
+                        usu.consultarInfoTanque(timers[client.room].winner.jugador,timers[client.room].winner.tanque,(err,code,tanque)=>{
+                            io.to(client.room).emit('endMatch',tanque.nombre);
+                        });
+                    } else {
+                         io.to(client.room).emit('endMatch',null);
+                    }
+                    timers[client.room]=null;
+                    partidas[client.room]=null;
+                    let a = [];
+                    for (let id in partidas){
+                        a.push({
+                            id:id,
+                            nombre:partidas[id].nombre,
+                            medida:partidas[id].medida
+                        })
+                    }
+                    io.emit("actualizarPartidas",a);
                 }
             },35);
             timers[client.room] = {id:data.idSala,timer:timer,ended:false,winner:null}
