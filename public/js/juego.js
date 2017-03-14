@@ -90,6 +90,7 @@ function seleccionarTanque(){
 		}
 		selected = $(e.currentTarget).parent().attr('id');
 		$('#'+selected).addClass('selected');
+		localStorage.setItem("Tanque", selected);
 	});
 }
 function unirsePartida(){
