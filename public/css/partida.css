@@ -26,15 +26,18 @@
 	position:relative;
 	display:flex;
 	justify-content: center;
+	align-items: center;
 	/*background-size: 100% 100%;*/
 }
-.vida{
+.vidatanque, .vidaroca{
 	/*color:ghostwhite;*/
 	font-family: Montserrat;
 	font-size: 18px;
 	-webkit-text-fill-color:white;
-	-webkit-text-stroke:1px black;
+	-webkit-text-stroke:0.7px black;
 	position:absolute;
-	bottom: -5px;
-	right: 0px;
+}
+.vidaroca{
+	-webkit-text-fill-color:peachpuff;
+	-webkit-text-stroke:0.7px black;
 }

@@ -78,7 +78,7 @@ function insertObject(object){
 	}
 	$('#'+row+'-'+col).css('background-repeat','no-repeat');
 	if (object.vida){
-		$('#'+row+'-'+col).append('<div class="vida">'+object.vida+'</div>')
+		$('#'+row+'-'+col).append('<div class="vida'+object.tipo+'">'+object.vida+'</div>')
 	}
 }
 
