@@ -61,6 +61,10 @@ function borrar(){
 			data: {id:id},
 			method: 'POST',
 			success: function(res, textStatus, xhr){
+				if (selected == id){
+					selected = null;
+					localStorage.removeItem("Tanque");
+				}
 				consultarTanques();
 				$(self).attr('disabled',false);
 			}
@@ -166,6 +170,7 @@ function consultarTanques(){
 				if (res.tanques.length){
 					if (!selected){
 						selected=res.tanques[0].ID
+						localStorage.setItem("Tanque", selected);
 					}
 					$('#'+selected).addClass('selected');
 				}

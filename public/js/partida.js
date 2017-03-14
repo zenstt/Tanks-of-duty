@@ -18,8 +18,6 @@ socket.on('endMatch',function(data){
 		}
 		window.location.href = '/juego';
 	},400);
-	
-	
 });
 
 $(document).ready(() => {
@@ -79,6 +77,9 @@ function insertObject(object){
 		$('#'+row+'-'+col).css('background-size','contain');
 	}
 	$('#'+row+'-'+col).css('background-repeat','no-repeat');
+	if (object.vida){
+		$('#'+row+'-'+col).append('<div class="vida">'+object.vida+'</div>')
+	}
 }
 
 function createBoard(row) {
