@@ -106,6 +106,11 @@ class Tablero {
 	 * log: {string} devuelve el dato del error
 	 */
 	insertarTanque(tanque) {
+		for (let id in this._tanques){
+			if(tanque.id==id){
+				return {err:true,log:"El tanque ya existe en este tablero"};
+			}
+		}
 		let ranTanqueX = Math.floor(Math.random() * (this._columnas + 1));
 		let ranTanqueY = Math.floor(Math.random() * (this._filas + 1));
 		let insertar=this.insertar(tanque, ranTanqueX, ranTanqueY);
