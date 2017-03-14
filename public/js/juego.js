@@ -102,9 +102,10 @@ function unirsePartida(){
 			data: {idPartida:id,idTanque:selected},
 			method: 'POST',
 			success: function(res, textStatus, xhr){
+				console.log(res)
 				$(self).attr('disabled',false);
-				if (res.error){
-					alert(res.partida.message);
+				if (res.err){
+					alert(res.message);
 				} else {
 					localStorage.setItem("idPartida", res.num);
 					window.location.href = res.url;	

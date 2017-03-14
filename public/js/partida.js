@@ -12,7 +12,7 @@ socket.on('endMatch',function(data){
 	$(window).off('keyup');
 	setTimeout(function(){
 		if (data){
-			alert("¡El tanque '"+data+"' ha ganado la partida!");
+			alert("¡El tanque '"+data.tanque+"' de "+data.jugador+" ha ganado la partida!");
 		} else {
 			alert("¡Empate!");
 		}
@@ -21,8 +21,9 @@ socket.on('endMatch',function(data){
 	
 	
 });
-loadImages();
+
 $(document).ready(() => {
+	loadImages();
 	let id = localStorage.getItem("idPartida");
 	$.ajax({
 		url:'/partidas/obtenerPartida',

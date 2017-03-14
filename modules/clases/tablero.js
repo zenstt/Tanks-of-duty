@@ -106,8 +106,8 @@ class Tablero {
 	 * log: {string} devuelve el dato del error
 	 */
 	insertarTanque(tanque) {
-		for (let id in this._tanques){
-			if(tanque.id==id){
+		for (let dato of this._tanques){
+			if(tanque.id==dato[0]){	
 				return {err:true,log:"El tanque ya existe en este tablero"};
 			}
 		}

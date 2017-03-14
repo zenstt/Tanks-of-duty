@@ -55,11 +55,11 @@ function crearPartida(nombre,medida,idJugador,idTanque,cb){
             console.log(data);
             timers[data.idpartida].winner=data.ganador;
         });
-        meterJugador(idJugador,idTanque,num,(err)=>{
-            if (err){
-                cb({error:false,num:num});
+        meterJugador(idJugador,idTanque,num,(data)=>{
+            if (data.err){
+                cb(data);
             } else {
-                cb({error:true,message:"No se encuentra el tanque del jugador"});
+                cb({error:false,num:num});
             }
         });
     } else {
@@ -77,10 +77,9 @@ function meterJugador(idJugador,idTanque,idPartida,cb){
     let user = new usuario('nombreTanque',mysqlconnection);
     user.consultarInfoTanque(idJugador,idTanque,(err,code,info)=>{
         if (code){
-            cb(false);
+            cb({err:true,message:"No se encuentra el tanque"});
         }else{
-            partidas[idPartida].meterJugador(idJugador,info.nombre,idTanque);
-            cb(true);
+            cb(partidas[idPartida].meterJugador(idJugador,info.nombre,idTanque));
         }
     });
 }
@@ -116,12 +115,12 @@ router.post('/obtenerPartida', (req, res) => {
     res.end();
 });
 router.post('/entrarPartida', (req, res) => {
-    meterJugador(req.user.ID,req.body.idTanque,req.body.idPartida,(code)=>{
-        if (code){
-            res.json({error:false,num:req.body.idPartida,url:'/partida'});
+    meterJugador(req.user.ID,req.body.idTanque,req.body.idPartida,(data)=>{
+        if (data.err){
+            res.json(data);
             res.end();
         } else {
-            res.json({error:true,message:"No se encuentra la partida"});
+            res.json({error:false,num:req.body.idPartida,url:'/partida'});
             res.end();
         }
     });
@@ -150,18 +149,21 @@ router.get('/page', function(req, res) {
         url: '/partida'
     });
 });
+function sendPartidas(io){
+    let a = [];
+    for (let id in partidas){
+        a.push({
+            id:id,
+            nombre:partidas[id].nombre,
+            medida:partidas[id].medida
+        })
+    }
+    io.emit("actualizarPartidas",a);
+}
 function socket(io,client){
     console.log('Client connected');
     client.on('newPartida',function(data){
-        let a = [];
-        for (let id in partidas){
-            a.push({
-                id:id,
-                nombre:partidas[id].nombre,
-                medida:partidas[id].medida
-            })
-        }
-        io.emit("actualizarPartidas",a);
+       sendPartidas(io);
     });
     client.on('newSala',function(data){
         client.room=data.idSala;
@@ -169,29 +171,26 @@ function socket(io,client){
         if (!timers[client.room]){
              let timer = setInterval(function(){
                 io.to(client.room).emit('update',{partida:partidas[client.room].tablero});
-                console.log(timers[client.room].winner);
                 if (timers[client.room].winner || timers[client.room].winner=='null'){
                     clearInterval(timers[client.room].timer);
-                    console.log("test")
                     let usu = new usuario("winner",mysqlconnection);
                     if (timers[client.room].winner!="null"){
                         usu.consultarInfoTanque(timers[client.room].winner.jugador,timers[client.room].winner.tanque,(err,code,tanque)=>{
-                            io.to(client.room).emit('endMatch',tanque.nombre);
+                            usu.getDataById(timers[client.room].winner.jugador,(err,code,jugador)=>{
+                                console.log(jugador)
+                                io.to(client.room).emit('endMatch',{tanque:tanque.nombre,jugador:jugador.username});
+                                delete timers[client.room];
+                                delete partidas[client.room];
+                                sendPartidas(io);
+                            }) 
                         });
                     } else {
-                         io.to(client.room).emit('endMatch',null);
+                        io.to(client.room).emit('endMatch',null);
+                        io.to(client.room).emit('endMatch',{tanque:tanque.nombre,jugador:jugador.nombre});
+                        delete timers[client.room];
+                        delete partidas[client.room];
+                        sendPartidas(io);
                     }
-                    timers[client.room]=null;
-                    partidas[client.room]=null;
-                    let a = [];
-                    for (let id in partidas){
-                        a.push({
-                            id:id,
-                            nombre:partidas[id].nombre,
-                            medida:partidas[id].medida
-                        })
-                    }
-                    io.emit("actualizarPartidas",a);
                 }
             },35);
             timers[client.room] = {id:data.idSala,timer:timer,ended:false,winner:null}

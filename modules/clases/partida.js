@@ -146,12 +146,19 @@ class Partida {
 	 * @param {number} idTanque  
 	 */
 	meterJugador(idJugador,nombreTanque, idTanque) {
+		console.log(this._jugadores);
+		for (let dato of this._jugadores){
+			if(idJugador==dato[0] && idTanque!=dato[1].tanque){	
+				return {err:true,message:"El jugador ya existe en la partida con otro tanque"};
+			}
+		}
 		this._jugadores.set(idJugador, {tanque:idTanque,vivo:true});
 		if(this._jugadores.size>1){
 			this._empezada=true;
 		}
 		let tanque = new elementos.tanque(nombreTanque,idTanque,idJugador);
 		this._tablero.insertarTanque(tanque);
+		return {err:false}
 	}
 }
 module.exports = Partida;
