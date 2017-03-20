@@ -1,7 +1,7 @@
 "use strict";
 // var socket = io.connect(window.location.hostname);
-var socket=io.connect('192.168.0.15:3000');
-// var socket=io.connect('localhost:3000',{'forceNew':true});
+// var socket=io.connect('192.168.0.15:3000');
+var socket=io.connect('192.168.0.32:3000',{'forceNew':true});
 var timer = null;
 
 socket.on('update',function(data){
@@ -68,12 +68,14 @@ function action(act,direction){
 }
 
 function insertObject(object){
-	let row = object.y
-	let col = object.x
+	let row = object.y;
+	let col = object.x;
 	if (object.tipo=='roca'){
-		$('#'+row+'-'+col).css('background-image','url(./img/'+object.tipo+'.png)');
+		$('#'+row+'-'+col).css('background-image','url(/img/'+object.tipo+'.png)');
+		$('#'+row+'-'+col).css('background-size','auto');
 	} else {
-		$('#'+row+'-'+col).css('background-image','url(./img/'+object.tipo+'_'+object.o+'.png)');
+		let tipo=object.id==localStorage.getItem("Tanque")? "propio":object.tipo;
+		$('#'+row+'-'+col).css('background-image','url(/img/'+tipo+'_'+object.o+'.png)');
 		$('#'+row+'-'+col).css('background-size','contain');
 	}
 	$('#'+row+'-'+col).css('background-repeat','no-repeat');
@@ -102,6 +104,9 @@ function createBoard(row) {
 }
 function insertThings(board){
 	for (let object of board.datos){
+		if(object.tipo=="tanque" && object.id==localStorage.getItem("Tanque")){
+			$("#muni").text(object.municion);
+		}
 		insertObject(object);
 	}
 }
