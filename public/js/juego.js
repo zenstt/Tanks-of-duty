@@ -10,6 +10,7 @@ socket.on('actualizarPartidas',function(data){
 
 var selected = null;
 $(document).ready(function() {
+	$('#name').html('Bienvenido '+localStorage.getItem('name'));
 	consultarTanques();
 	consultarPartidas();
 	$('#crearTanque').click(function(){

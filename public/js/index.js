@@ -1,12 +1,7 @@
 "use strict";
 $(document).ready(function(){
-	// $.ajax({
-	// 	url:'/iniciarPartida',
-	// 	success:function(res,textStatus,xhr){
-	// 		console.log(res.map.);
-	// 	}
-	// });
-	$('#enviar').click(function(){
+	$('#enviar').click(function(e){
+		e.preventDefault();
 		if ($('#username').val() && $('#password').val()){
 			var datos={
 				username:$('#username').val(),
@@ -19,10 +14,13 @@ $(document).ready(function(){
 				success: function(res, textStatus, xhr){
 					if(res.login){
 						localStorage.setItem('id',res.id);
-						$('#error').html('Login correcto');
+						localStorage.setItem('name',$('#username').val());
 						window.location.href = res.url;
-					}
-				}
+					}	
+				},
+				error: function(res){
+					$('#error').html('Login incorrecto');
+				} 
 			});
 		}
 	});

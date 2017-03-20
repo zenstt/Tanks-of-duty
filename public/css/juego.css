@@ -1,15 +1,8 @@
-*{
-	/*border:1px solid green;*/
-}
-html,body{
-	/*margin:0 auto;*/
-	/*height: 99%;*/
-}
 #cont{
 	height: 500px;
 	display:flex;
 	justify-content: center;
-	margin-top: 10px;
+	/*margin-top: 10px;*/
 }
 #tanques,#partidas{
 	background-color: WhiteSmoke;
@@ -36,7 +29,7 @@ html,body{
 	border-top:0px;
 }
 #tanques{
-	width:50%;
+	width:70%;
 }
 #misTanques{
 	border-right:0px; 
@@ -45,7 +38,7 @@ html,body{
 	border-right:0px; 
 }
 #partidas{
-	width: 20%;
+	width: 25%;
 }
 #datosPartida{
 	height: 7%;

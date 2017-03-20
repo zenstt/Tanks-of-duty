@@ -4,24 +4,27 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>World of Tanks</title>
-	<link rel="stylesheet" href="">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/style.css">
 	<script src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js'></script>
+	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
 </head>
 <body>
-<h1>World Of Tanks</h1>
-<h2>Login</h2>
-<div class="login">
-	<input id="username" name="username" placeholder="Introduce tu usuario"></input>
-	<input id="password" name="password" placeholder="Contraseña"></input>
-	<input type="button" id="enviar" value="Enviar"></input>
+<div id="container">
+	<form class="form-signin">
+		<h2 class="form-signin-heading">Tanks of duty</h2>
+		<div id="error" class="alert-danger"></div>
+		<input id="username" name="username" type="text"  class="form-control" placeholder="Usuario" required>
+		<input id="password" name="password" type="password"  class="form-control" placeholder="Password" required>
+		<button class="btn btn-lg btn-primary btn-block" id="enviar" type="submit">Login</button>
+	</form>
+	<div class="text-center"><a href="registro.html">¿No tienes cuenta? Registrate</a></div>
+	<div id="logins" class="text-center">
+		<a href="login/auth/twitter"><img src="img/twitter_login.png" alt="login twitter"></a>
+		<a href="login/auth/facebook"><img src="img/facebook_login.png" alt="login twitter"></a>
+		<a href="login/auth/google"><img src="img/google_login.png" alt="login twitter"></a>	
+	</div>
 </div>
-<a href="login/auth/twitter"><button type="">Log with Twitter</button></a>
-<a href="login/auth/facebook"><button type="">Log with Facebook</button></a>
-<a href="login/auth/google"><button type="">Log with google</button></a>
-	
-<a href="registro.html"><button type="button">Registrase</button></a>
-<div id="error"></div>
-<div id="juego"></div>
 <script src='js/index.js'></script>
 </body>
 </html>

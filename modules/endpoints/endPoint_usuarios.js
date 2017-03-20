@@ -199,7 +199,7 @@ router.post('/login', passport.authenticate('local'), function(req, res) {
     } else {
         res.json({
             login: false,
-            url: '/login'
+            url: '/'
         });
     }
 });
