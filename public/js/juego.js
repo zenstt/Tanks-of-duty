@@ -1,8 +1,8 @@
 "use strict";
-// var socket = io.connect(window.location.hostname);
+var socket = io.connect(window.location.hostname);
 // var socket=io.connect('192.168.0.15:3000');
 // var socket=io.connect('192.168.0.32:3000');
-var socket=io.connect('localhost:3000');
+// var socket=io.connect('localhost:3000');
 
 socket.on('actualizarPartidas',function(data){
 	console.log(data)

@@ -1,2 +1,0 @@
-node pruebaTanques.js
-pause

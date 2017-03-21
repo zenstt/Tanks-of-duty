@@ -157,7 +157,6 @@ passport.use(new GoogleStrategy({
         callbackURL: "http://localhost/login/auth/google/callback"
     },
     function(accessToken, refreshToken, profile, done) {
-        console.log(profile)
         let datos = {
             id: profile.id,
             username: profile.displayName.replace(" ", ""),
@@ -191,6 +190,7 @@ router.use(passport.initialize());
 router.use(passport.session());
 
 router.post('/login', passport.authenticate('local'), function(req, res) {
+	console.log("hola!");
     if (req.isAuthenticated()) {
         res.json({
             login: true,

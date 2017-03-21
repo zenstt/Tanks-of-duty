@@ -23,7 +23,7 @@ const app = express();
 const server = http.createServer(app);
 var io = require('socket.io')(server);
 
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 80;
 app.set('view engine', 'ejs');
 
 app.use(BodyParser.json()); //Recibir peticiones POST con datos en json
@@ -89,4 +89,4 @@ io.on("connection", function (client) {
     apiPartidas.socket(io, client);
 });
 
-server.listen(3000, ()=>console.log('Servidor comezado con express. Escoitando no porto 3000'));
+server.listen(port, ()=>console.log('Servidor comezado con express. Escoitando no porto '+port));
