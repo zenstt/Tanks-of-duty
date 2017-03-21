@@ -204,7 +204,13 @@ router.post('/login', passport.authenticate('local'), function(req, res) {
     }
 });
 
+router.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
+});
+
 router.get('/auth/twitter', passport.authenticate('twitter'));
+
 router.get('/auth/twitter/callback', passport.authenticate('twitter', {
     failureRedirect: '/login',
     successRedirect: '/juego'
@@ -231,7 +237,7 @@ router.get('/auth/google/callback',
 );
 
 router.get('/', function(req, res) {
-        res.redirect('/');
-    })
+	res.redirect('/');
+})
     // -------- TERMINA ONE CLICK -------- //
 module.exports = router;
