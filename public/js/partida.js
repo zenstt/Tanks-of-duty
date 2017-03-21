@@ -1,7 +1,8 @@
 "use strict";
 // var socket = io.connect(window.location.hostname);
 // var socket=io.connect('192.168.0.15:3000');
-var socket=io.connect('192.168.0.32:3000',{'forceNew':true});
+// var socket=io.connect('192.168.0.32:3000');
+var socket=io.connect('localhost:3000');
 var timer = null;
 
 socket.on('update',function(data){
@@ -48,10 +49,14 @@ function loadImages(){
 	$('#loadImages').append("<img src='img/bala_este.png'/>");
 	$('#loadImages').append("<img src='img/bala_oeste.png'/>");
 	$('#loadImages').append("<img src='img/bala_norte.png'/>");
+	$('#loadImages').append("<img src='img/bala_sur.png'/>");
 	$('#loadImages').append("<img src='img/tanque_este.png'/>");
 	$('#loadImages').append("<img src='img/tanque_oeste.png'/>");
 	$('#loadImages').append("<img src='img/tanque_norte.png'/>");
 	$('#loadImages').append("<img src='img/tanque_sur.png'/>");
+	$('#loadImages').append("<img src='img/propio_norte.png'/>");
+	$('#loadImages').append("<img src='img/propio_oeste.png'/>");
+	$('#loadImages').append("<img src='img/propio_este.png'/>");
 	$('#loadImages').empty();
 }
 function action(act,direction){
@@ -76,7 +81,7 @@ function insertObject(object){
 	} else {
 		let tipo=object.id==localStorage.getItem("Tanque")? "propio":object.tipo;
 		$('#'+row+'-'+col).css('background-image','url(/img/'+tipo+'_'+object.o+'.png)');
-		$('#'+row+'-'+col).css('background-size','contain');
+		// $('#'+row+'-'+col).css('background-size','contain');
 	}
 	$('#'+row+'-'+col).css('background-repeat','no-repeat');
 	if (object.vida){
