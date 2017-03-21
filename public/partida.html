@@ -3,18 +3,31 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title></title>
+	<title>Tanks of Duty</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/partida.css">
 	<script src="/socket.io/socket.io.js"></script>
 	<script src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js'></script>
 	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
 </head>
 <body>
+	<nav class="navbar navbar-default">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="/juego">Tanks Of Duty</a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li><a id="name">Bienvenido </a></li>
+				</ul>
+		<ul class="nav navbar-nav navbar-right">
+		<li><a href="/juego">Salir Partida</a></li>
+		</ul>
+			</div><!--/.nav-collapse -->
+		</div>
+	</nav>
 	<div id="cont">
-		<h1>Tanks of Duty</h1>
 		<h3>Munición: <span id="muni"></span></h3>
-		<nav id="game">
-		</nav>
 		<div id="board">
 			
 		</div>

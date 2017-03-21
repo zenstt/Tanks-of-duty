@@ -23,6 +23,7 @@ socket.on('endMatch',function(data){
 
 $(document).ready(() => {
 	loadImages();
+	$('#name').html('Bienvenido '+localStorage.getItem('name'));
 	let id = localStorage.getItem("idPartida");
 	$.ajax({
 		url:'/partidas/obtenerPartida',
@@ -81,9 +82,9 @@ function insertObject(object){
 	} else {
 		let tipo=object.id==localStorage.getItem("Tanque")? "propio":object.tipo;
 		$('#'+row+'-'+col).css('background-image','url(/img/'+tipo+'_'+object.o+'.png)');
-		// $('#'+row+'-'+col).css('background-size','contain');
+		$('#'+row+'-'+col).css('background-size','contain');
 	}
-	$('#'+row+'-'+col).css('background-repeat','no-repeat');
+	// $('#'+row+'-'+col).css('background-repeat','no-repeat');
 	if (object.vida){
 		$('#'+row+'-'+col).append('<div class="vida'+object.tipo+'">'+object.vida+'</div>')
 	}
@@ -104,8 +105,8 @@ function createBoard(row) {
 		columna++;
 	}
 	$("#board").html(tileSet);
-	$(".casilla").css("heigth", 500 / row - 2);
-	$(".casilla").css("width", 500 / column - 2);
+	$(".casilla").css("heigth", 500 / row );
+	$(".casilla").css("width", 500 / row );
 }
 function insertThings(board){
 	for (let object of board.datos){

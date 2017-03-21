@@ -11,28 +11,21 @@ h1{
 	flex-direction: column;
 	align-items: center;
 }
-#game,#board{	
-	display: flex;
-	width: 500px;
-}
 #board,.casilla{
 	border: 1px solid gray;
 
 }
-/*#game{
-	align-items: center;
-	height: 70px;
-	justify-content: space-around;
-}*/
 #board{
-	height: 500px;
+	width: 502px;
+	height: 502px;
+	display: flex;
 	flex-wrap: wrap;
-	justify-content: space-between;
+	justify-content: center;
 }
 .casilla{
 	background-image: url("/img/nada.png");
 	background-size: contain;
-	background-repeat: no-repeat;
+	/*background-repeat: no-repeat;*/
 	position:relative;
 	display:flex;
 	justify-content: center;
@@ -49,4 +42,7 @@ h1{
 .vidaroca{
 	-webkit-text-fill-color:peachpuff;
 	-webkit-text-stroke:0.7px black;
+}
+#cont>h3{
+	margin-top: 0px;
 }
